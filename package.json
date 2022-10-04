@@ -1,0 +1,30 @@
+{
+  "name": "tcc_change_management_b",
+  "version": "1.0.0",
+  "description": "This is a personal project that proposes the creation of a change management platform in a software house.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoMB60/TCC_Change_Management_B.git"
+  },
+  "author": "Tiago Moreira Batalha",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThiagoMB60/TCC_Change_Management_B/issues"
+  },
+  "homepage": "https://github.com/ThiagoMB60/TCC_Change_Management_B#readme",
+  "dependencies": {
+    "body-parser": "^1.20.0",
+    "cpf-cnpj-validator": "^1.0.3",
+    "crypto-js": "^4.1.1",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "knex": "^2.3.0",
+    "mysql2": "^2.3.3",
+    "nodemon": "^2.0.20",
+    "uuid": "^9.0.0"
+  }
+}
