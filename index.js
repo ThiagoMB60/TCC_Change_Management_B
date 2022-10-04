@@ -14,6 +14,6 @@ app.use("/", jsonParser, router);
 app.listen(port, async function (erro) {
   let time = new Date().toLocaleString();
 
-  if (!erro) console.log(func.msgColor('green'), `Gerenciador de mudanças iniciado com SUCESSO! -${time}`);
-  else console.log(func.msgColor('red'), `ERROR: Falha ao inciar aplicação. ${time}\n\n${erro}`);
+  if (!erro) func.msgSuccess(`Gerenciador de mudanças iniciado com SUCESSO! -${time}`);
+  else func.msgError(`ERROR: Falha ao inciar aplicação. ${time}\n\n${erro}`);
 });

@@ -26,11 +26,12 @@ module.exports = class User extends CRUDModel {
     try {
       this.validaEntrada();
       this.id = uuidv4();
+      //console.log(this.constructor.name)
     } catch (error) {
-      console.log(func.msgColor('red'), error);
+      func.msgError(error);
       throw error;
     }
-    console.log(this)
+    //console.log(this)
   }
 
   validaAlterar() {

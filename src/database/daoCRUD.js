@@ -21,7 +21,7 @@ module.exports = class daCRUD {
       await database
         .insert(this.getParamsInsert)
         .into(this.bdTabela)
-        .then(() => resposta = `Empresa '${this.empresa.razao}' cadastrada com SUCESSO`)
+        .then(() => this.resposta = `'${this.obj.constructor.name}' cadastrado com SUCESSO`)
         .catch((err) => {
           console.log(err);
           throw err;
@@ -30,11 +30,10 @@ module.exports = class daCRUD {
       console.log(error)
       throw error;
     }
-    return resposta;
+    return this.resposta;
   }
 
   async buscar() {
-    let resposta;
     let whereClauses = {};
     let whereRawClauses = "";
 
@@ -50,7 +49,7 @@ module.exports = class daCRUD {
         .where(whereClauses)
         .whereRaw(whereRawClauses)
         .orderBy(this.bdRazaoEmp)
-        .then((result) => resposta = result)
+        .then((result) => this.resposta = result)
         .catch((err) => {
           console.log(err);
           throw err;
@@ -59,12 +58,10 @@ module.exports = class daCRUD {
       console.log(error)
       throw error;
     }
-    return resposta;
+    return this.resposta;
   }
 
   async alterar() {
-    let resposta;
-
     try {
       this.empresa.razao = this.empresa.razao.toUpperCase();
       await database(this.bdTabela)
@@ -79,33 +76,31 @@ module.exports = class daCRUD {
           if (result < 1) {
             throw "Alteração NÃO efetuada: Falha ao encontrar código da empresa."
           }
-          resposta = `Empresa ${this.empresa.razao} alterada com sucesso!`;
+          this.resposta = `Empresa ${this.empresa.razao} alterada com sucesso!`;
         })
         .catch();
     } catch (error) {
       console.log(error);
       throw error;
     }
-    return resposta;
+    return this.resposta;
   }
 
   async deletar() {
-    let resposta;
-
     try {
       await database(this.bdTabela)
         .where({ [this.bdIdEmp]: this.empresa.id })
         .del()
         .then((result) => {
           if (result < 1) throw "Exclusão NÃO efetuada: Falha ao encontrar código da empresa.";
-          resposta = `Empresa ${this.empresa.razao} excluida com sucesso!`;
+          this.resposta = `Empresa ${this.empresa.razao} excluida com sucesso!`;
         })
         .catch();
     } catch (error) {
       console.log(error);
       throw error;
     }
-    return resposta;
+    return this.resposta;
   }
 };
 3
