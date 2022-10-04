@@ -2,19 +2,19 @@ const express = require("express");
 const controller = express.Router();
 let model;
 
-function instanciaEmpresa(r) {
+function instanciaUser(r) {
   return new model(
     r.id,
-    r.cnpj,
-    r.razao,
-    r.ativo
+    r.name,
+    r.pass,
+    r.mail
   );
 }
 
 function instanciaModel(req) {
-  if (req.baseUrl === '/empresa') {
-    model = require('../models/mdlEmpresa');
-    return instanciaEmpresa(req.body);
+  if (req.baseUrl === '/user') {
+    model = require('../models/mdlUser');
+    return instanciaUser(req.body);
   }
 }
 
