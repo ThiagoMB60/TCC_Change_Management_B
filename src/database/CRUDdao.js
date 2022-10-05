@@ -1,61 +1,72 @@
-const database = require("../database/database");
-const func = require("../functions/functions")
+const database = require("./database");
+const { msgError } = require("../functions/functions");
+const utils = require("../functions/functions")
 
-module.exports = class daCRUD {
+module.exports = class CRUDdao {
   constructor(objeto) {
-    this.bdTabela; //table name    
     this.resposta;  //resposta para o model
     this.obj = objeto; //
   }
 
-  getParamsInsert() { };
-  getWhereClausesSearch() { };
-  getWhereRawClausesSearch() { };
-  getKeyToUpdate() { };
-  getParamsToUpdate() { };
-  getKeyToDelete() { };
+  getParamsInsert() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getWhereClausesSearch() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getWhereRawClausesSearch() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getKeyToUpdate() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getParamsToUpdate() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getKeyToDelete() {
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  getOrderBy() { };
 
 
   async inserir() {
     try {
       await database
-        .insert(this.getParamsInsert)
+        .insert(this.getParamsInsert())
         .into(this.bdTabela)
         .then(() => this.resposta = `'${this.obj.constructor.name}' cadastrado com SUCESSO`)
         .catch((err) => {
-          console.log(err);
+          utils.msgError(err);
           throw err;
         });
     } catch (error) {
-      console.log(error)
+      utils.msgError(error)
       throw error;
     }
     return this.resposta;
   }
 
   async buscar() {
-    let whereClauses = {};
-    let whereRawClauses = "";
-
-    if (this.empresa.id) whereClauses[this.bdIdEmp] = this.empresa.id;
-    if (this.empresa.cnpj) whereClauses[this.bdCnpjEmp] = this.empresa.cnpj;
-    if (this.empresa.razao) whereRawClauses = `${this.bdRazaoEmp} like '%${this.empresa.razao}%'`;
-    if (this.empresa.ativo || this.empresa.ativo === 0) whereClauses[this.bdAtivoEmp] = this.empresa.ativo;
-
     try {
       await database
         .select()
         .into(this.bdTabela)
-        .where(whereClauses)
-        .whereRaw(whereRawClauses)
-        .orderBy(this.bdRazaoEmp)
+        .where(this.getWhereClausesSearch())
+        .whereRaw(this.getWhereRawClausesSearch())
+        .orderBy(this.getOrderBy())
         .then((result) => this.resposta = result)
         .catch((err) => {
-          console.log(err);
+          utils.msgError(err);
           throw err;
         });
     } catch (error) {
-      console.log(error)
+      utils.msgError(error)
       throw error;
     }
     return this.resposta;

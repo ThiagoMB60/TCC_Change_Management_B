@@ -7,7 +7,8 @@ function instanciaUser(r) {
     r.id,
     r.name,
     r.pass,
-    r.mail
+    r.mail,
+    r.type
   );
 }
 

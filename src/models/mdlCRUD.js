@@ -1,15 +1,17 @@
-class CRUDModel {
+const utils = require('../functions/functions')
+
+module.exports = class CRUDModel {
   constructor(dao) {
     this.dao = dao;
     this.resposta;
   }
 
-  validaInserir() {console.log("Validação de INSERÇÃO executada da classe CRUD_GENÉRICA!", '\n', this)}
-  validaBuscar() {console.log("Validação de BUSCA executada da classe CRUD_GENÉRICA!", '\n', this)}
-  validaAlterar() {console.log("Validação de ALTERAÇÃO executada da classe CRUD_GENÉRICA!", '\n', this)}
-  validaDeletar() {console.log("Validação de EXCLUSÃO executada da classe CRUD_GENÉRICA!", '\n', this)}
+  validaInserir() { utils.msgWarning("Validação de INSERÇÃO executada da classe CRUD_GENÉRICA!", '\n', this) }
+  validaBuscar() { utils.msgWarning("Validação de BUSCA executada da classe CRUD_GENÉRICA!", '\n', this) }
+  validaAlterar() { utils.msgWarning("Validação de ALTERAÇÃO executada da classe CRUD_GENÉRICA!", '\n', this) }
+  validaDeletar() { utils.msgWarning("Validação de EXCLUSÃO executada da classe CRUD_GENÉRICA!", '\n', this) }
 
-  async inserir() { 
+  async inserir() {
     try {
       this.validaInserir();
       let daoInstance = new this.dao(this);
@@ -57,7 +59,6 @@ class CRUDModel {
     return this.resposta;
   }
 
-  
+
 }
 
-module.exports = CRUDModel;
