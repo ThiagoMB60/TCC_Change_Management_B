@@ -24,18 +24,19 @@ CREATE TABLE IF NOT EXISTS `user` (
   `pass` varchar(50) NOT NULL,
   `mail` varchar(50) NOT NULL,
   `type` varchar(50) NOT NULL,
+  `active` tinyint NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user` (`user`),
   UNIQUE KEY `mail` (`mail`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
--- Copiando dados para a tabela tcc.user: ~3 rows (aproximadamente)
+-- Copiando dados para a tabela tcc.user: ~0 rows (aproximadamente)
 DELETE FROM `user`;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`id`, `user`, `pass`, `mail`, `type`) VALUES
-	('18c3e9e9-d87e-4f33-bfc8-a8889a5411a7', 'Thiago Moreira Batalha', 'U2FsdGVkX19x0yU863GhYZTqnwBBgSq2J6Okb2GYH3c=', 'thiagomoreira60@gmail.com', 'ADM'),
-	('226be487-5635-4192-8468-6c287685c953', 'Vitoria dos Santos Francisco', 'U2FsdGVkX1+ldycUrIGYRWTy3b4jwNJ79/HhZt5cuXw=', 'svitoria@gmail.com', 'ADM'),
-	('f02495cd-dc95-49ad-9159-cc693639bc16', 'Vitoria dos Santos F', 'U2FsdGVkX1/OfPiUjIceU/LJ7f9ERyb6ydpdnzQbr18=', 'svitoria2@gmail.com', 'ADM');
+INSERT INTO `user` (`id`, `user`, `pass`, `mail`, `type`, `active`) VALUES
+	('18c3e9e9-d87e-4f33-bfc8-a8889a5411a7', 'Thiago Moreira Batalha', 'U2FsdGVkX19x0yU863GhYZTqnwBBgSq2J6Okb2GYH3c=', 'thiagomoreira60@gmail.com', 'ADM', 0),
+	('226be487-5635-4192-8468-6c287685c953', 'Vitoria dos Santos Francisco', 'U2FsdGVkX1+ldycUrIGYRWTy3b4jwNJ79/HhZt5cuXw=', 'svitoria@gmail.com', 'ADM', 0),
+	('f02495cd-dc95-49ad-9159-cc693639bc16', 'Vitoria dos Santos F', 'U2FsdGVkX1/OfPiUjIceU/LJ7f9ERyb6ydpdnzQbr18=', 'svitoria2@gmail.com', 'ADM', 0);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

@@ -7,13 +7,14 @@ require("dotenv").config();
 
 
 module.exports = class User extends CRUDModel {
-  constructor(id, user, pass, mail, type) {
+  constructor(id, user, pass, mail, type, active) {
     super(daoEntidade); //resposta, dao <-- atributos herdados
     this.id = id;       //STRING UUID FORMAT
     this.user = user;   //STRING
     this.mail = mail;   //STRING
     this.pass = pass;   //STRING
     this.type = type;   //STRING
+    this.active = active; //BOOLEAN
   }
 
   validaEntrada() {
@@ -28,6 +29,7 @@ module.exports = class User extends CRUDModel {
   validaInserir() {
     try {
       this.validaEntrada();
+      if (!this.active) this.active = true;
       this.id = uuidv4();
     } catch (error) {
       utils.msgError(error);

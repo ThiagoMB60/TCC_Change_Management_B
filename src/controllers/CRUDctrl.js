@@ -8,7 +8,8 @@ function instanciaUser(r) {
     r.user,
     r.pass,
     r.mail,
-    r.type
+    r.type,
+    r.active
   );
 }
 
@@ -57,7 +58,6 @@ controller.delete('/deletar', async (req, res) => {
     res.status(400).json({ message: `** ERROR!!! **: ${error}` })
   }
 })
-
 
 module.exports = controller;
 

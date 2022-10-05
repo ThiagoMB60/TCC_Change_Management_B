@@ -9,6 +9,7 @@ module.exports = class DaoUser extends CRUDdao {
     this.bdPass = 'pass';
     this.bdMail = 'mail';
     this.bdType = 'type';
+    this.bdActive = 'active';
   }
 
   getParamsInsert() {
@@ -18,6 +19,7 @@ module.exports = class DaoUser extends CRUDdao {
       [this.bdPass]: this.obj.pass,
       [this.bdMail]: this.obj.mail,
       [this.bdType]: this.obj.type,
+      [this.bdActive]: this.obj.active
     }
   }
 
@@ -26,6 +28,7 @@ module.exports = class DaoUser extends CRUDdao {
     if (this.obj.id) obj[this.bdId] = this.obj.id;
     if (this.obj.mail) obj[this.bdMail] = this.obj.mail;
     if (this.obj.type) obj[this.bdType] = this.obj.type;
+    if (this.obj.active || this.obj.active === false) obj[this.bdActive] = this.obj.active;
     return obj;
   }
 
@@ -33,10 +36,26 @@ module.exports = class DaoUser extends CRUDdao {
     if (this.obj.user) return `${this.bdUser} like '%${this.obj.user}%'`
     else return "";
   }
+  getKeyToUpdate() {
+    if (!this.obj.id) {
+      utils.msgError(`Id para usuário${this.obj.user}não informado ou inválido.`);
+      throw `Id para usuário${this.obj.user}não informado ou inválido.`;
+    }
+    return { [this.bdId]: this.obj.id }
+  };
 
-  getParamsToUpdate() { }
+  getParamsToUpdate() {
+    return {
+      [this.bdUser]: this.obj.user,
+      [this.bdPass]: this.obj.pass,
+      [this.bdMail]: this.obj.mail,
+      [this.bdType]: this.obj.type,
+      [this.bdActive]: this.obj.active
+    }
+  }
 
-  getKeyToDelete() { };
+  getKeyToDelete() {
+    return { [this.bdId]: this.obj.id }
+  };
 
-  getKeyToUpdate() { };
 }

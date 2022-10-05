@@ -73,24 +73,18 @@ module.exports = class CRUDdao {
 
   async alterar() {
     try {
-      this.empresa.razao = this.empresa.razao.toUpperCase();
       await database(this.bdTabela)
-        .where({ [this.bdIdEmp]: this.empresa.id })
-        .update({
-          [this.bdCnpjEmp]: this.empresa.cnpj,
-          [this.bdRazaoEmp]: this.empresa.razao,
-          [this.bdAtivoEmp]: this.empresa.ativo,
-          [this.bdCertEmp]: this.empresa.certificado
-        })
+        .where(this.getKeyToUpdate())
+        .update(this.getParamsToUpdate())
         .then((result) => {
           if (result < 1) {
-            throw "Alteração NÃO efetuada: Falha ao encontrar código da empresa."
+            throw "Alteração NÃO efetuada: Falha ao encontrar Id"
           }
-          this.resposta = `Empresa ${this.empresa.razao} alterada com sucesso!`;
+          this.resposta = `Alteração efetuada com sucesso!`;
         })
         .catch();
     } catch (error) {
-      console.log(error);
+      utils.msgError(error);
       throw error;
     }
     return this.resposta;
@@ -99,15 +93,15 @@ module.exports = class CRUDdao {
   async deletar() {
     try {
       await database(this.bdTabela)
-        .where({ [this.bdIdEmp]: this.empresa.id })
+        .where(this.getKeyToDelete())
         .del()
         .then((result) => {
-          if (result < 1) throw "Exclusão NÃO efetuada: Falha ao encontrar código da empresa.";
-          this.resposta = `Empresa ${this.empresa.razao} excluida com sucesso!`;
+          if (result < 1) throw "Exclusão NÃO efetuada: Falha ao encontrar Id.";
+          this.resposta = `Exclusão efetuada com sucesso!`;
         })
         .catch();
     } catch (error) {
-      console.log(error);
+      utils.msgError(error);
       throw error;
     }
     return this.resposta;
