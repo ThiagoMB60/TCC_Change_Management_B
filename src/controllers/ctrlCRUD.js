@@ -5,7 +5,7 @@ let model;
 function instanciaUser(r) {
   return new model(
     r.id,
-    r.name,
+    r.user,
     r.pass,
     r.mail,
     r.type

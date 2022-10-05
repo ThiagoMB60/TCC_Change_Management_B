@@ -22,7 +22,21 @@ module.exports = class DaoUser extends CRUDdao {
   }
 
   getWhereClausesSearch() {
-
+    let obj = {};
+    if (this.obj.id) obj[this.bdId] = this.obj.id;
+    if (this.obj.mail) obj[this.bdMail] = this.obj.mail;
+    if (this.obj.type) obj[this.bdType] = this.obj.type;
+    return obj;
   }
 
+  getWhereRawClausesSearch() {
+    if (this.obj.user) return `${this.bdUser} like '%${this.obj.user}%'`
+    else return "";
+  }
+
+  getParamsToUpdate() { }
+
+  getKeyToDelete() { };
+
+  getKeyToUpdate() { };
 }

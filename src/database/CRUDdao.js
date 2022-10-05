@@ -32,7 +32,7 @@ module.exports = class CRUDdao {
     msgError('Método não implementado na classe filha.', this.constructor.name)
     throw `Método não implementado na classe filha. ${this.constructor.name}`
   };
-  getOrderBy() { };
+  getOrderBy() { return };
 
 
   async inserir() {
@@ -59,7 +59,6 @@ module.exports = class CRUDdao {
         .into(this.bdTabela)
         .where(this.getWhereClausesSearch())
         .whereRaw(this.getWhereRawClausesSearch())
-        .orderBy(this.getOrderBy())
         .then((result) => this.resposta = result)
         .catch((err) => {
           utils.msgError(err);
