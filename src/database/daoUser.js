@@ -1,4 +1,6 @@
 const CRUDdao = require('./CRUDdao')
+const utils = require('../functions/functions')
+const database = require("./database");
 
 module.exports = class DaoUser extends CRUDdao {
   constructor(objeto) {
@@ -57,5 +59,25 @@ module.exports = class DaoUser extends CRUDdao {
   getKeyToDelete() {
     return { [this.bdId]: this.obj.id }
   };
+
+  //exclusive routes
+
+  async buscarPorUsuario() {
+    try {
+      await database
+        .select()
+        .into(this.bdTabela)
+        .where({ [this.bdUser]: this.obj.user })
+        .then((result) => this.resposta = result)
+        .catch((err) => {
+          utils.msgError(err);
+          throw err;
+        });
+    } catch (error) {
+      utils.msgError(error)
+      throw error;
+    }
+    return this.resposta;
+  }
 
 }

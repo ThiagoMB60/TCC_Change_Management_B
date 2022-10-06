@@ -41,4 +41,19 @@ module.exports = class User extends CRUDModel {
   validaAlterar() {
     return this.validaEntrada();
   }
+
+  //exclusive routes
+  async buscarPorUsuario() {
+    if (!this.user) throw `Usuário e/ou Senha inválidos!`
+    try {
+      let daoInstance = new this.dao(this);
+      this.resposta = await daoInstance.buscarPorUsuario();
+      if (this.resposta.length !== 1)
+        throw `Usuário e/ou Senha inválidos`;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+    return this.resposta;
+  }
 }

@@ -2,6 +2,8 @@ const express = require("express");
 const controller = express.Router();
 let model;
 
+const license = require("../functions/jwt")
+
 function instanciaUser(r) {
   return new model(
     r.id,
@@ -29,7 +31,7 @@ controller.post('/inserir', async (req, res) => {
   }
 })
 
-controller.post('/buscar', async (req, res) => {
+controller.post('/buscar', license.validaAutorizacao, async (req, res) => {
   try {
     res.status(200).json({
       message: 'Busca efetuada com sucesso!',

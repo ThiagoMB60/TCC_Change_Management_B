@@ -27,7 +27,7 @@ module.exports = class CRUDModel {
     try {
       this.validaBuscar();
       let daoInstance = new this.dao(this);
-      this.resposta = await daoInstance.buscar()
+      this.resposta = await daoInstance.buscar();
     } catch (error) {
       console.log(error);
       throw error;
