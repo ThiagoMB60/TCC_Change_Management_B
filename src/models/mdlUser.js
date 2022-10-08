@@ -1,7 +1,7 @@
 const daoEntidade = require("../database/daoUser");
 const CRUDModel = require("./mdlCRUD");
 const { v4: uuidv4 } = require('uuid');
-const utils = require("../functions/functions")
+const utils = require("../functions/utils")
 require("dotenv").config();
 
 

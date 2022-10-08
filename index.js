@@ -1,6 +1,9 @@
-const func = require('./src/functions/functions')
+const func = require('./src/functions/utils')
 const express = require("express");
 const app = express();
+
+app.set('view engine', 'ejs');
+app.use(express.static('public'));
 
 const bodyParser = require("body-parser");
 const jsonParser = bodyParser.json();

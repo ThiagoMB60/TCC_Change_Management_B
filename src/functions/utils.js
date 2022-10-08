@@ -1,5 +1,6 @@
 //IMPORTS ↓↓
 const crypto = require('crypto-js');
+const axios = require('axios');
 //IMPORTS ↑↑
 
 
@@ -18,13 +19,13 @@ module.exports = {
         return '\x1b[47m%s\x1b[0m';
     }
   },
-  msgSuccess(msg){
+  msgSuccess(msg) {
     console.log('\x1b[42m%s\x1b[0m', msg);
   },
-  msgWarning(msg){
+  msgWarning(msg) {
     console.log('\x1b[43m%s\x1b[0m', msg);
   },
-  msgError(msg){
+  msgError(msg) {
     console.log('\x1b[41m%s\x1b[0m', msg);
   },
   crypt(message, key) {

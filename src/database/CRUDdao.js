@@ -1,6 +1,6 @@
 const database = require("./database");
-const { msgError } = require("../functions/functions");
-const utils = require("../functions/functions")
+const { msgError } = require("../functions/utils");
+const utils = require("../functions/utils")
 
 module.exports = class CRUDdao {
   constructor(objeto) {

@@ -1,4 +1,4 @@
-const utils = require('../functions/functions')
+const utils = require('../functions/utils')
 
 module.exports = class CRUDModel {
   constructor(dao) {

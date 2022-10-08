@@ -7,4 +7,10 @@ const ctrlUser = require("./src/controllers/ctrlUser");
 router.use("/user", ctrlCRUD);
 router.use("/user", ctrlUser);
 
+
+//================================================================
+router.get("/perguntar", (req, res) => {
+  res.render("login");
+});
+
 module.exports = router;

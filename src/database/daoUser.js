@@ -1,5 +1,5 @@
 const CRUDdao = require('./CRUDdao')
-const utils = require('../functions/functions')
+const utils = require('../functions/utils')
 const database = require("./database");
 
 module.exports = class DaoUser extends CRUDdao {

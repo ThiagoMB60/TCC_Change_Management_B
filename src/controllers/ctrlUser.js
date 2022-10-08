@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const mdlUser = require('../models/mdlUser');
-const utils = require('../functions/functions');
+const utils = require('../functions/utils');
 require("dotenv").config();
 
 const express = require("express");
