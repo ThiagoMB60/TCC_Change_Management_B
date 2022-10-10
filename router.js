@@ -9,7 +9,7 @@ router.use("/user", ctrlUser);
 
 
 //================================================================
-router.get("/perguntar", (req, res) => {
+router.get("/application", (req, res) => {
   res.render("login");
 });
 

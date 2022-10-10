@@ -10,7 +10,7 @@ async function tryLogin() {
   ).then(response => {
     execFunc(response);
   }).catch(error => {
-    console.error(error)
+    console.error(error);
   })
 }
 
