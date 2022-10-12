@@ -1,3 +1,4 @@
+
 async function tryLogin() {
   await request(
     'POST',
@@ -8,12 +9,16 @@ async function tryLogin() {
       pass: document.getElementById('iptPass').value
     }
   ).then(response => {
-    execFunc(response);
+    trataResposta(response);
   }).catch(error => {
-    console.error(error);
+    alert('Usuário e/ou Senha inválidos.');
   })
 }
 
-function execFunc(response) {
-  console.log(response.token);
+function trataResposta(resp) {
+  if (!resp.auth) {
+    alertError('Falha ao efetuar login:', resp.message);
+  }
+
+
 }

@@ -48,8 +48,6 @@ module.exports = class User extends CRUDModel {
     try {
       let daoInstance = new this.dao(this);
       this.resposta = await daoInstance.buscarPorUsuario();
-      if (this.resposta.length !== 1)
-        throw `Usuário e/ou Senha inválidos`;
     } catch (error) {
       console.log(error);
       throw error;

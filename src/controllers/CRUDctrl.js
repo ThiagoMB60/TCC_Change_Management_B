@@ -35,7 +35,7 @@ controller.post('/buscar', license.validaAutorizacao, async (req, res) => {
   try {
     res.status(200).json({
       message: 'Busca efetuada com sucesso!',
-      results: await instanciaModel(req).buscar()
+      data: await instanciaModel(req).buscar()
     });
   } catch (error) {
     console.log(error);
