@@ -2,7 +2,7 @@ const express = require("express");
 const controller = express.Router();
 let model;
 
-const license = require("../functions/jwt")
+const license = require("../functions/jwt");
 
 function instanciaUser(r) {
   return new model(

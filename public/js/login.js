@@ -14,12 +14,24 @@ async function tryLogin() {
   })
 }
 
-function trataResposta(resp) {
-  if (!resp.auth) {
-    // alert('Falha ao efetuar login: ' + resp.message);
-    alertError('Falha ao efetuar o Login:', resp.message);
-  } else {
+async function trataResposta(resp) {
+  if (resp.auth) { //se autorizado salva o token nos cookies para as demais requests    
+    let decodedToken = jwt_decode(resp.token);
+    Cookies.set('token', resp.token, {
+      expires: 1
+    });
+    Cookies.set('userId', decodedToken.userId, {
+      expires: 1
+    });
     alertSuccess(resp.message);
+    await request(
+      'GET',
+      'http://localhost:5000/application',
+      { 'Content-Type': 'application/json' },
+      {}
+    ).then()
+  } else {
+    alertError('Falha ao efetuar o Login:', resp.message);
   }
 }
 
