@@ -1,4 +1,3 @@
-
 async function tryLogin() {
   await request(
     'POST',
@@ -17,8 +16,10 @@ async function tryLogin() {
 
 function trataResposta(resp) {
   if (!resp.auth) {
-    alertError('Falha ao efetuar login:', resp.message);
+    // alert('Falha ao efetuar login: ' + resp.message);
+    alertError('Falha ao efetuar o Login:', resp.message);
+  } else {
+    alertSuccess(resp.message);
   }
-
-
 }
+
