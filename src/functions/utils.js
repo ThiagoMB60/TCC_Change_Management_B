@@ -35,21 +35,18 @@ module.exports = {
     let bytes = crypto.AES.decrypt(cryptedMessage, key)
     return bytes.toString(crypto.enc.Utf8);
   }, async axiosRequest(method, url, headers, data) {
-    let config = {
-      method: method,
-      url: url,
-      headers: headers,
-      data: JSON.stringify(data)
-    }
 
-    return await axios(config)
-      .then((response) => {
+      return await axios({
+        method: method,
+        url: url,
+        headers: headers,
+        data: JSON.stringify(data)
+      }).then((response) => {
         return response.data;
       })
       .catch((error) => {
-        console.log('resp: \n', response)
+        console.log('resp: \n', error)
         return error;
-
-      });
+      })
   }
 }
