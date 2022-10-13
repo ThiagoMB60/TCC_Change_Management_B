@@ -15,22 +15,21 @@ async function tryLogin() {
 }
 
 async function trataResposta(resp) {
-  if (resp.auth) { //se autorizado salva o token nos cookies para as demais requests  
+  if (resp.auth) { //se autorizado salva o token nos cookies para as demais requests    
+    let decodedToken = jwt_decode(resp.token);
     Cookies.set('token', resp.token, {
       expires: 1
     });
-
-    let decodedToken = jwt_decode(resp.token);
     Cookies.set('userId', decodedToken.userId, {
       expires: 1
     });
     alertSuccess(resp.message);
-    // await request(
-    //   'GET',
-    //   'http://localhost:5000/application',
-    //   { 'Content-Type': 'application/json' },
-    //   {}
-    // ).then()
+    await request(
+      'GET',
+      'http://localhost:5000/application',
+      { 'Content-Type': 'application/json' },
+      {}
+    ).then()
   } else {
     alertError('Falha ao efetuar o Login:', resp.message);
   }

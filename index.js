@@ -6,6 +6,8 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 const bodyParser = require("body-parser");
+
+app.use(bodyParser.urlencoded({ extended: false }));
 const jsonParser = bodyParser.json();
 
 const router = require("./router");

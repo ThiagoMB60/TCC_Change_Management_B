@@ -10,6 +10,7 @@ const tokenExpireTime = 24 * 3600; //hours * seconds per hour
 
 ctrlUser.post('/login', async (req, res) => {
   let r = req.body;
+  console.log(req.body)
 
   try {
     let user = new mdlUser('', r.user, r.pass);
@@ -32,7 +33,7 @@ ctrlUser.post('/login', async (req, res) => {
       }
 
       else { //usuário existe e é válido
-        res.status(200).json({
+        let resposta = {
           message: 'Usuário autenticado',
           auth: true,
           token: jwt.sign( //gera o token com o id, secret e o o tempo de validade
@@ -40,7 +41,8 @@ ctrlUser.post('/login', async (req, res) => {
             process.env.SECRET,
             { expiresIn: tokenExpireTime }
           )
-        });
+        }
+        res.redirect()
       }
     } else { //se NÃO encontrar o usuário
       res.status(200).json({ //usuário existe mas senha incorreta
