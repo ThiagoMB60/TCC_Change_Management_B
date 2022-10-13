@@ -7,7 +7,7 @@
 				<h3 class="text-center">Login de Usuário</h3>
 			</div>
 			<div class="card-body">
-				<form class="needs-validation" onsubmit="event.preventDefault();">
+				<form class="needs-validation" method="POST" action="/user/login">
 					<label>Usuário</label>:</label>
 					<input id="iptUser" type="text" placeholder="USER" class="form-control" name="user" required>
 					<br>
@@ -15,7 +15,8 @@
 					<input id="iptPass" type="password" placeholder="PASSWORD" class="form-control" name="pass" required >
 					<br>
           <div class="d-grid gap-2">
-					  <button class="btn btn-dark" id="btnLogin" onclick="tryLogin()">Login</button>
+					  <!-- <button class="btn btn-dark" id="btnLogin" onclick="await tryLogin()">Login</button> -->
+						<button class="btn btn-dark" id="btnLogin" type="submit">Login</button>
           </div>
 				</form>
 			</div>

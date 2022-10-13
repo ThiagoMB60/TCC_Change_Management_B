@@ -10,5 +10,9 @@ controllerFront.get("/", license.validaAutorizacao, (req, res) => {
   res.render("index");
 });
 
+controllerFront.get("/login", (req, res) => {
+  res.render("login");
+});
+
 
 module.exports = controllerFront;
