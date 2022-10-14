@@ -37,6 +37,7 @@ ctrlUser.post('/login', async (req, res) => {
           auth: true,
           token: jwt.sign( //gera o token com o id, secret e o o tempo de validade
             { userId: userBd.id },
+            { userType: userBd.type },
             process.env.SECRET,
             { expiresIn: tokenExpireTime }
           )

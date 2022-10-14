@@ -13,7 +13,14 @@ controllerFront.use(cookieParser())
 
 controllerFront.get("/", license.validaAutorizacao, async (req, res) => {
   utils.msgSuccess(req.body.userId);
-  res.render("index", );
+  res.render("index",);
+
+});
+
+controllerFront.get("/users", license.validaAutorizacao, async (req, res) => {
+  // utils.msgSuccess(req.body.userId);
+  // utils.msgSuccess(req.body.userType);
+  res.render("users", { userType: req.body.userType });
 
 });
 
@@ -23,7 +30,7 @@ controllerFront.get("/login", async (req, res) => {
 
 controllerFront.post("/logar", async (req, res) => {
   //faz o request para o login
-  await axios({ 
+  await axios({
     method: 'post',
     url: process.env.URL + '/user/login',
     headers: { 'Content-Type': 'application/json' },
@@ -31,28 +38,28 @@ controllerFront.post("/logar", async (req, res) => {
       user: req.body.user,
       pass: req.body.pass
     })
-  }).then((response) => { 
+  }).then((response) => {
     // console.log(response);
     //se login válido e autenticado
-    if(response.data.auth){  
-      jwt.verify(response.data.token, process.env.SECRET, (err, decoded)=>{
-        if (err) utils.msgError('Falha ao decodificar o token');  
+    if (response.data.auth) {
+      jwt.verify(response.data.token, process.env.SECRET, (err, decoded) => {
+        if (err) utils.msgError('Falha ao decodificar o token');
         //seta o id do usuario criptografado no navegador      
-        res.cookie('user', 
-          utils.crypt(decoded.userId, process.env.SECRET)); 
-      }) 
+        res.cookie('user',
+          utils.crypt(decoded.userId, process.env.SECRET));
+      })
       //seta o token criptografado no navegador
-      res.cookie('token', 
-        utils.crypt(response.data.token, process.env.SECRET)); 
+      res.cookie('token',
+        utils.crypt(response.data.token, process.env.SECRET));
       res.redirect("/application");
-    }else{
+    } else {
       //direciona para o login
-      res.redirect("/application/login"); 
+      res.redirect("/application/login");
     }
   }).catch((error) => {
     utils.msgError("catch do axios request")
     console.log(error);
-    res.redirect("/application/login"); 
+    res.redirect("/application/login");
   })
   //console.log(error);
 });
