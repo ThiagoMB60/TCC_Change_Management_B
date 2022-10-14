@@ -31,7 +31,7 @@ controller.post('/inserir', async (req, res) => {
   }
 })
 
-controller.post('/buscar', license.validaAutorizacao, async (req, res) => {
+controller.post('/buscar', async (req, res) => {
   try {
     res.status(200).json({
       message: 'Busca efetuada com sucesso!',

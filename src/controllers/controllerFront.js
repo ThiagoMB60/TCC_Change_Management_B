@@ -12,16 +12,32 @@ const license = require("../functions/jwt");
 controllerFront.use(cookieParser())
 
 controllerFront.get("/", license.validaAutorizacao, async (req, res) => {
-  utils.msgSuccess(req.body.userId);
-  res.render("index",);
+  // utils.msgSuccess(req.body.userId);
+  // utils.msgWarning(res.locals.userType )
+  res.render("index"), { userType: res.locals.userType };
 
 });
 
-controllerFront.get("/users", license.validaAutorizacao, async (req, res) => {
-  // utils.msgSuccess(req.body.userId);
-  // utils.msgSuccess(req.body.userType);
-  res.render("users", { userType: req.body.userType });
-
+controllerFront.get("/users", license.authAdm,async (req, res) => {
+  await axios({
+    method: 'post',
+    url: process.env.URL + '/user/buscar',
+    data: JSON.stringify({
+      id : '',
+      user : '',
+      pass : '',
+      mail : '',
+      type : '',
+      active : ''
+    })
+  }).then((users) =>{
+    msgSuccess(users)
+  }).catch(err=>{
+    utils.msgError("catch do axios request: USERS")
+    //console.log(err);
+    res.redirect("/application/logout")
+  })
+  res.render("users", { userType: res.locals.userType });
 });
 
 controllerFront.get("/login", async (req, res) => {
@@ -43,10 +59,13 @@ controllerFront.post("/logar", async (req, res) => {
     //se login válido e autenticado
     if (response.data.auth) {
       jwt.verify(response.data.token, process.env.SECRET, (err, decoded) => {
+        // utils.msgWarning(decoded);
         if (err) utils.msgError('Falha ao decodificar o token');
-        //seta o id do usuario criptografado no navegador      
+        //seta o id e tipo do usuario criptografado no navegador      
         res.cookie('user',
           utils.crypt(decoded.userId, process.env.SECRET));
+        res.cookie('userType',
+          utils.crypt(decoded.userType, process.env.SECRET));
       })
       //seta o token criptografado no navegador
       res.cookie('token',
@@ -57,7 +76,7 @@ controllerFront.post("/logar", async (req, res) => {
       res.redirect("/application/login");
     }
   }).catch((error) => {
-    utils.msgError("catch do axios request")
+    utils.msgError("catch do axios request: LOGAR")
     console.log(error);
     res.redirect("/application/login");
   })
@@ -67,6 +86,7 @@ controllerFront.post("/logar", async (req, res) => {
 controllerFront.get("/logout", (req, res) => {
   // clear the cookies
   res.clearCookie("user");
+  res.clearCookie("userType");
   res.clearCookie("token");
   // redirect to login
   res.redirect("/application/login");;

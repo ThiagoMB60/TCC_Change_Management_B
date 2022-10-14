@@ -4,6 +4,7 @@ const utils = require('../functions/utils');
 require("dotenv").config();
 
 const express = require("express");
+const { msgWarning } = require('../functions/utils');
 const ctrlUser = express.Router();
 
 const tokenExpireTime = 24 * 3600; //hours * seconds per hour
@@ -36,8 +37,7 @@ ctrlUser.post('/login', async (req, res) => {
           message: 'Usuário autenticado',
           auth: true,
           token: jwt.sign( //gera o token com o id, secret e o o tempo de validade
-            { userId: userBd.id },
-            { userType: userBd.type },
+            { userId: userBd.id, userType: userBd.type},
             process.env.SECRET,
             { expiresIn: tokenExpireTime }
           )

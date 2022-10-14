@@ -38,7 +38,10 @@
 						<ul class="dropdown-menu dropdown-menu-dark">
 							<li><a class="dropdown-item" href="#">SOLICITANTES</a></li>
 							<li><a class="dropdown-item" href="#">MÓDULOS</a></li>
-							<li><a class="dropdown-item" href="application/users/">USUÁRIOS</a></li>
+							<% if (userType == 'ADM') { %>
+								<li><a class="dropdown-item" href="application/users">USUÁRIOS</a></li>
+							<%}%>
+							
 						</ul>
 					</li>
 					<li>
