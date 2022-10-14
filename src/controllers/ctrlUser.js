@@ -10,7 +10,6 @@ const tokenExpireTime = 24 * 3600; //hours * seconds per hour
 
 ctrlUser.post('/login', async (req, res) => {
   let r = req.body;
-  console.log(req.body)
 
   try {
     let user = new mdlUser('', r.user, r.pass);
@@ -42,7 +41,7 @@ ctrlUser.post('/login', async (req, res) => {
             { expiresIn: tokenExpireTime }
           )
         }
-        res.redirect()
+        return resposta;
       }
     } else { //se NÃO encontrar o usuário
       res.status(200).json({ //usuário existe mas senha incorreta
@@ -51,7 +50,7 @@ ctrlUser.post('/login', async (req, res) => {
       });
     }
   } catch (error) {
-    console.log(error);
+    //console.log(error);
     res.status(400).json({
       message: `** ERROR!!! **: ${error}`,
       auth: false

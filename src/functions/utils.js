@@ -1,6 +1,8 @@
 //IMPORTS ↓↓
 const crypto = require('crypto-js');
-const axios = require('axios');
+const axios = require('axios').default;
+require("dotenv").config();
+
 //IMPORTS ↑↑
 
 
@@ -34,19 +36,22 @@ module.exports = {
   decrypt(cryptedMessage, key) {
     let bytes = crypto.AES.decrypt(cryptedMessage, key)
     return bytes.toString(crypto.enc.Utf8);
-  }, async axiosRequest(method, url, headers, data) {
-
-      return await axios({
-        method: method,
-        url: url,
-        headers: headers,
-        data: JSON.stringify(data)
-      }).then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        console.log('resp: \n', error)
-        return error;
-      })
+  },
+  async axiosRequest(method, url, headers, data) {
+    let result;
+    console.log(method, url, headers, data)
+    await axios.post({
+      url: url,
+      headers: headers,
+      data: JSON.stringify(data)
+    }).then((response) => {
+      console.log(response);
+      result = response.data;
+    }).catch((error) => {
+      console.log("erro no utils")
+      //return error;
+    })
+    return result;
+    console.log(result)
   }
 }
