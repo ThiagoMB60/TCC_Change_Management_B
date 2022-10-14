@@ -12,7 +12,9 @@ const license = require("../functions/jwt");
 controllerFront.use(cookieParser())
 
 controllerFront.get("/", license.validaAutorizacao, async (req, res) => {
-  res.render("index");
+  utils.msgSuccess(req.body.userId);
+  res.render("index", );
+
 });
 
 controllerFront.get("/login", async (req, res) => {
@@ -20,8 +22,8 @@ controllerFront.get("/login", async (req, res) => {
 });
 
 controllerFront.post("/logar", async (req, res) => {
-  
-  await axios({ //realiza o login
+  //faz o request para o login
+  await axios({ 
     method: 'post',
     url: process.env.URL + '/user/login',
     headers: { 'Content-Type': 'application/json' },
@@ -31,24 +33,36 @@ controllerFront.post("/logar", async (req, res) => {
     })
   }).then((response) => { 
     // console.log(response);
-    if(response.data.auth){  //se login válido e autenticado
+    //se login válido e autenticado
+    if(response.data.auth){  
       jwt.verify(response.data.token, process.env.SECRET, (err, decoded)=>{
-        if (err) utils.msgError('Falha ao decodificar o token');        
+        if (err) utils.msgError('Falha ao decodificar o token');  
+        //seta o id do usuario criptografado no navegador      
         res.cookie('user', 
-          utils.crypt(decoded.userId, process.env.SECRET)); //seta o id do usuario criptografado no navegador
+          utils.crypt(decoded.userId, process.env.SECRET)); 
       }) 
+      //seta o token criptografado no navegador
       res.cookie('token', 
-        utils.crypt(response.data.token, process.env.SECRET)); //seta o token criptografado no navegador
+        utils.crypt(response.data.token, process.env.SECRET)); 
       res.redirect("/application");
     }else{
-      res.redirect("/application/login"); //direciona para o login
+      //direciona para o login
+      res.redirect("/application/login"); 
     }
   }).catch((error) => {
     utils.msgError("catch do axios request")
     console.log(error);
-    //return error;
+    res.redirect("/application/login"); 
   })
   //console.log(error);
+});
+
+controllerFront.get("/logout", (req, res) => {
+  // clear the cookies
+  res.clearCookie("user");
+  res.clearCookie("token");
+  // redirect to login
+  res.redirect("/application/login");;
 });
 
 
