@@ -32,7 +32,7 @@ ctrlUser.post('/login', async (req, res) => {
       }
 
       else { //usuário existe e é válido
-        let resposta = {
+        res.status(200).json({
           message: 'Usuário autenticado',
           auth: true,
           token: jwt.sign( //gera o token com o id, secret e o o tempo de validade
@@ -40,8 +40,7 @@ ctrlUser.post('/login', async (req, res) => {
             process.env.SECRET,
             { expiresIn: tokenExpireTime }
           )
-        }
-        return resposta;
+        });
       }
     } else { //se NÃO encontrar o usuário
       res.status(200).json({ //usuário existe mas senha incorreta

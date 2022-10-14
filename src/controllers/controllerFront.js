@@ -20,56 +20,35 @@ controllerFront.get("/login", async (req, res) => {
 });
 
 controllerFront.post("/logar", async (req, res) => {
-  let result;
-  // await utils.axiosRequest(
-  //   'POST',
-  //   process.env.URL + '/user/login',
-  //   { 'Content-Type': 'application/json' },
-  //   {
-  //     user: req.body.user,
-  //     pass: req.body.pass
-  //   }
-  // ).then(response => {
-  //   if (response.auth) { // se usuário autorizado     
-
-  //     utils.msgError('AQUI *************************')
-  //     jwt.verify(response.token, process.env.SECRET, (err, decoded) => {
-  //       if (err) return res.redirect('application/login');
-  //       //console.log(decoded)
-
-  //       res.redirect('/');
-  //       cookies.set('token', decoded.token, {
-  //         expires: 1
-  //       });
-  //       cookies.set('userId', decoded.userId, {
-  //         expires: 1
-  //       });
-
-  //     })
-  //   } else { //user não autorizado vai para login page
-  //     return res.redirect("login");
-  //   }
-
-  // }).catch(error => {
-  utils.msgSuccess({ url: process.env.URL + '/user/login' })
-  await axios.post({
-    url: 'http://localhost:5000/user/login',
+  
+  await axios({ //realiza o login
+    method: 'post',
+    url: process.env.URL + '/user/login',
     headers: { 'Content-Type': 'application/json' },
     data: JSON.stringify({
       user: req.body.user,
       pass: req.body.pass
     })
-  }).then((response) => {
-    console.log(response);
-    result = response.data;
+  }).then((response) => { 
+    // console.log(response);
+    if(response.data.auth){  //se login válido e autenticado
+      jwt.verify(response.data.token, process.env.SECRET, (err, decoded)=>{
+        if (err) utils.msgError('Falha ao decodificar o token');        
+        res.cookie('user', 
+          utils.crypt(decoded.userId, process.env.SECRET)); //seta o id do usuario criptografado no navegador
+      }) 
+      res.cookie('token', 
+        utils.crypt(response.data.token, process.env.SECRET)); //seta o token criptografado no navegador
+      res.redirect("/application");
+    }else{
+      res.redirect("/application/login"); //direciona para o login
+    }
   }).catch((error) => {
     utils.msgError("catch do axios request")
     console.log(error);
     //return error;
   })
-  utils.msgWarning(result);
   //console.log(error);
-  res.redirect("login");
 });
 
 

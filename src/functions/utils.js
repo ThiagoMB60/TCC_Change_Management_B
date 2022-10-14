@@ -37,21 +37,4 @@ module.exports = {
     let bytes = crypto.AES.decrypt(cryptedMessage, key)
     return bytes.toString(crypto.enc.Utf8);
   },
-  async axiosRequest(method, url, headers, data) {
-    let result;
-    console.log(method, url, headers, data)
-    await axios.post({
-      url: url,
-      headers: headers,
-      data: JSON.stringify(data)
-    }).then((response) => {
-      console.log(response);
-      result = response.data;
-    }).catch((error) => {
-      console.log("erro no utils")
-      //return error;
-    })
-    return result;
-    console.log(result)
-  }
 }
