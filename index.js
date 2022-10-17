@@ -7,9 +7,12 @@ require("dotenv").config();
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
+const tokenExpireTime = 24 * 3600; //hours * seconds per hour
+
 app.use(session({
-  secret : process.env.SECRET,
+  secret: process.env.SECRET,
   ressave: false,
+  expires: new Date(Date.now() + tokenExpireTime),
   saveUninitialized: true
 }));
 

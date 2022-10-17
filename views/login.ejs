@@ -26,8 +26,12 @@
   <script type="text/javascript" src="/js/login.js"></script>	
 </body>
 <script>
-	if ('<%=message%>' != undefined){
-		Swal()
+	if ('<%=message%>' != ""){
+		Swal.fire({
+			icon: 'error',
+			title: 'ERRO!',
+			text: '<%=message%>'
+		})
 	}
 
 </script>
