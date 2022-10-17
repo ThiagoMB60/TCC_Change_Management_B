@@ -17,7 +17,7 @@ ctrlUser.post('/login', async (req, res) => {
     let user = new mdlUser('', r.user, r.pass);
     await user.buscarPorUsuario(); //busca usuário pelo 'user' no bd
     if (user.resposta.length < 1) { //se não encontrar um usuário com o username
-      res.render('/user/login', {message: 'Usuário e/ou Senha inválidos.'})
+      res.render('login', {message: 'Usuário e/ou Senha inválidos.'})
       return;
     }
 
