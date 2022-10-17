@@ -2,8 +2,65 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-  
+  <div class="container from-control my-5 border border-secundary rounded p-3">
+    <table id ="usersTable" class="table table-sm table-bordered 
+    table-striped table-hover table-secondary my-1">
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Tipo</th>
+          <th>Email</th>
+          <th>Ativo</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
   <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
+<script>
+  $(document).ready(function () {
+    $('#usersTable').DataTable({
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+      }, 
+      "paging": false,
+      "searching":false,
+      "order": [0,'asc'],
+      ajax: function ( data, callback, settings ) { 
+        $.ajax({            
+            url: '/user/buscar' ,            
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+							"Authorization": "Bearer " + '<%=session.token%>'
+						},                   
+            success: function( arrUsers, textStatus, jQxhr ){            	
+                callback({
+                    // draw: data.draw,
+                    data: arrUsers.data,
+                    recordsTotal:  0,
+                    recordsFiltered:  0
+                });                              
+            },
+            error: function( jqXhr, textStatus, errorThrown ){
+                console.log(errorThrown)                
+            }
+        });
+      },
+      "serverSide":true,
+		  columns: [                
+				{ data: "user" },
+				{ data: "type" },	        
+				{ data: "mail" },	        
+				{ data: "active" },	        
+				{ defaultContent: "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-toggle='modal' data-target='#modalTabelasPrecos' ><i class='fas fa-edit'></i></a>"+
+					"<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-trash'></i></i></a>"}                
+		  ]
+    });
+  });
+</script>
 </body>
 
 <%- include('partials/footer.ejs') %>

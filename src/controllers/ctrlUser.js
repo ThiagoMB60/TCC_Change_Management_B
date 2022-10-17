@@ -51,9 +51,7 @@ ctrlUser.get("/", license.validaAutorizacao, async (req, res) => {
 });
 
 ctrlUser.get("/list", license.authAdm, async (req, res) => {
-  let users = await new mdlUser().buscar();
-  console.log(arrUsers);
-  res.render("users", { arrUsers: arrUsers });
+  res.render("users", { session: req.session });
 });
 
 ctrlUser.get("/login", async (req, res) => {
