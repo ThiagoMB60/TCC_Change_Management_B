@@ -4,15 +4,16 @@ require("dotenv").config();
 
 module.exports = {
   validaAutorizacao(req, res, next) {
-    let token;
-    //se houver um token nos cookies
-    if (req.cookies.token)
+    //se houver um token na sessao
+    if (!req.session.token){
+      return res.redirect('user/logout');
+    }
       //decodifica o token armazenado no navegador 
-      token = utils.decrypt(req.cookies.token, process.env.SECRET)
+    let token = utils.decrypt(req.session.token, process.env.SECRET)
 
     jwt.verify(token, process.env.SECRET, (err, decoded) => {
       //se o token estiver ausente ou inválio
-      if (err) return res.redirect('application/logout');
+      if (err) return res.redirect('user/logout');
       res.locals.userId = decoded.userId;
       res.locals.userType = decoded.userType;
       //segue o fluxo da rota de origem
@@ -21,10 +22,10 @@ module.exports = {
   },
   authAdm(req, res, next){ 
     let token;
-    //se houver um token nos cookies
-    if (req.cookies){
+    //se houver um token nos session
+    if (req.session){
       //decodifica o token armazenado no navegador 
-      token = utils.decrypt(req.cookies.token, process.env.SECRET);
+      token = utils.decrypt(req.session.token, process.env.SECRET);
     }    
 
     jwt.verify(token, process.env.SECRET, (err, decoded) => {      

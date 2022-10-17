@@ -1,9 +1,17 @@
 const func = require('./src/functions/utils')
 const express = require("express");
 const app = express();
+const session = require("express-session");
+require("dotenv").config();
 
 app.set('view engine', 'ejs');
 app.use(express.static('public'));
+
+app.use(session({
+  secret : process.env.SECRET,
+  ressave: false,
+  saveUninitialized: true
+}));
 
 const bodyParser = require("body-parser");
 

@@ -18,7 +18,7 @@ controllerFront.get("/", license.validaAutorizacao, async (req, res) => {
 
 });
 
-controllerFront.get("/users", license.authAdm,async (req, res) => {
+controllerFront.get("/list", license.authAdm,async (req, res) => {
   await axios({
     method: 'post',
     url: process.env.URL + '/user/buscar',
