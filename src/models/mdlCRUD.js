@@ -10,6 +10,7 @@ module.exports = class CRUDModel {
   validaBuscar() { utils.msgWarning("Validação de BUSCA executada da classe CRUD_GENÉRICA!", '\n', this) }
   validaAlterar() { utils.msgWarning("Validação de ALTERAÇÃO executada da classe CRUD_GENÉRICA!", '\n', this) }
   validaDeletar() { utils.msgWarning("Validação de EXCLUSÃO executada da classe CRUD_GENÉRICA!", '\n', this) }
+  tratamentoPosBusca() { utils.msgWarning("VTratamento PÓS BUSCA executada da classe CRUD_GENÉRICA!", '\n', this) }
 
   async inserir() {
     try {
@@ -28,6 +29,7 @@ module.exports = class CRUDModel {
       this.validaBuscar();
       let daoInstance = new this.dao(this);
       this.resposta = await daoInstance.buscar();
+      this.tratamentoPosBusca();
     } catch (error) {
       console.log(error);
       throw error;

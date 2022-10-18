@@ -10,7 +10,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id">
+          <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id" disabled>
           <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário">
             <input id="iptuserMail" type="mail" class="form-control my-2" placeholder="Email">
             <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha">
@@ -46,14 +46,15 @@
   </div>
 
   <div class="container from-control">
-    <div class="card border-dark mb-3 w-100 mt-5">
+    <div class="card border-dark mb-3 mt-5">
       <div class="card-header">Cadastros</div>
       <div class="card-body text-dark">
         <div class="d-flex justify-content-between">
           <h5 class="card-title">Usuários</h5>
           <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class="fa-solid fa-user-plus"></i></a>
         </div>
-        <table id ="usersTable" class="table table-sm table-bordered 
+        <div class="table-responsive">
+          <table id ="usersTable" class="table table-sm table-bordered 
                                       table-striped table-hover table-secondary my-1">
           <thead>
             <tr>
@@ -67,6 +68,7 @@
           <tbody>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   </div>
@@ -135,12 +137,21 @@
     $("#radioUserAdministrador").attr("checked", false);
   }
 
-  function setDataModal(user){
+  function setDataUserModal(user){
     if(!user) {
       clearModalUser();
       return;
     }
-
+    $("#iptUserId").val(user.id);
+    $("#iptUserName").val(user.user);
+    $("#iptuserMail").val(user.mail);
+    $("#iptUserPass").val(user.pass);
+    $("#checkUserAtivo").prop("checked", user.active);
+    
+    let userType = true;
+    if(user.type === 'ADM') userType = !userType;
+    $("#radioUserConvencional").prop("checked", userType);
+    $("#radioUserAdministrador").prop("checked", !userType);
 
   }
 
@@ -193,11 +204,11 @@
     if(btnUser=='btnExcluir'){
       await deleteUser(dataRow)
     }else{
-      setDataModal(dataRow);    
+      setDataUserModal(dataRow);    
     }                    
 	});  
 
-  $("#btnNew").click(() => clearModalUser());
+  $("#btnNew").click(() => setDataUserModal());
 
 </script>
 </body>

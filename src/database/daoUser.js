@@ -25,9 +25,9 @@ module.exports = class DaoUser extends CRUDdao {
     }
   }
 
-  getSelectFields() {
-    return [this.bdId, this.bdUser, this.bdMail, this.bdType, this.bdActive]
-  };
+  // getSelectFields() {
+  //   return [this.bdId, this.bdUser, this.bdMail, this.bdType, this.bdActive]
+  // };
 
   getWhereClausesSearch() {
     let obj = {};

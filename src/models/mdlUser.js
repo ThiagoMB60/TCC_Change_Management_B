@@ -38,6 +38,14 @@ module.exports = class User extends CRUDModel {
     //console.log(this)
   }
 
+  tratamentoPosBusca() {
+    if(this.resposta.length > 0){
+      this.resposta.forEach(user => {
+        user.pass = utils.decrypt(user.pass, process.env.SECRET);
+      });
+    }
+  }
+
   validaAlterar() {
     return this.validaEntrada();
   }
