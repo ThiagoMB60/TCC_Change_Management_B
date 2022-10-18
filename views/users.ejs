@@ -48,47 +48,54 @@
 <script>
 
   async function deleteUser(user){
-    Swal({
-        title: "Apagar Usuário?",
+    
+    Swal.fire({
+        title: `Apagar usuário '${user.user}'?`,
         text: "Ao clicar em 'OK' o usuário será apagado.",
-        type: "warning",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Sim, apagar!",
-        closeOnConfirm: false
-    }, function (isConfirm) {
-        if (!isConfirm) {
-          return alertError(
-            'Operação abortada!',
-            `O Usuário${user.user}não foi apagado.`
-          );
-        }
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, apagar!"
+    }).then(confirmation =>{
+      if (!confirmation.isConfirmed) {
+        alertError(
+          'Operação abortada!',
+          `O Usuário '${user.user}' não foi apagado.`
+        );
+        return;
+      }else{
+        console.log(user)
         $.ajax({
-            url: "user/deletar",
-            type: "POST",
-            data: {
-              id : user.id,
-              user : '',
-              pass : '',
-              mail : '',
-              type : '',
-              active : '',
-            },
-            dataType: "html",
-            success: function () {
-                alertSuccess(
-                  'Usuário apagado!',
-                  `O usuário${user.user} foi apagado com sucesso.`
-                );
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alertError(
-                  '** ERRO **',
-                  `Falha ao apagar o usuário${user.user}.`
-                );
-            }
+          url: "/user/deletar",
+          type: "post",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: {
+            id : user.id,
+            user : '',
+            pass : '',
+            mail : '',
+            type : '',
+            active : '',
+          },  
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Usuário apagado!',
+              `O usuário '${user.user}' foi apagado com sucesso.`
+            );
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            console.log((xhr, ajaxOptions, thrownError))
+            alertError(
+              '** ERRO **',
+              `Falha ao apagar o usuário '${user.user}'.`
+            );
+          }
         });
-    });
+      }
+    })
     return;
   }
 
