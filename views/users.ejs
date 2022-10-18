@@ -2,32 +2,58 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-  <div class="container from-control my-5 border border-secundary rounded p-3">
-    <table id ="usersTable" class="table table-sm table-bordered 
-    table-striped table-hover table-secondary my-1">
-      <thead>
-        <tr>
-          <th>Usuário</th>
-          <th>Tipo</th>
-          <th>Email</th>
-          <th>Ativo</th>
-          <th>Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="modal fade modal-lg" id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel"><%=modalMode%></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
+
+  <div class="container from-control">
+    <div class="card border-dark mb-3 w-100 mt-5">
+      <div class="card-header">Cadastros</div>
+      <div class="card-body text-dark">
+        <h5 class="card-title">Usuários</h5>
+        <table id ="usersTable" class="table table-sm table-bordered 
+                                      table-striped table-hover table-secondary my-1">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>Tipo</th>
+              <th>Email</th>
+              <th>Ativo</th>
+              <th>Ação</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  
   <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
 <script>
-  $(document).ready(function () {
-    $('#usersTable').DataTable({
+  // $(document).ready(function () {
+  let userTable =   $('#usersTable').DataTable({
       "language": {
         "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
       }, 
       "paging": false,
       "searching":false,
-      "order": [0,'asc'],
+      
       ajax: function ( data, callback, settings ) { 
         $.ajax({            
             url: '/user/buscar' ,            
@@ -40,8 +66,8 @@
                 callback({
                     // draw: data.draw,
                     data: arrUsers.data,
-                    recordsTotal:  0,
-                    recordsFiltered:  0
+                    recordsTotal:  arrUsers.data.length,
+                    recordsFiltered:  arrUsers.data.length
                 });                              
             },
             error: function( jqXhr, textStatus, errorThrown ){
@@ -55,11 +81,32 @@
 				{ data: "type" },	        
 				{ data: "mail" },	        
 				{ data: "active" },	        
-				{ defaultContent: "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-toggle='modal' data-target='#modalTabelasPrecos' ><i class='fas fa-edit'></i></a>"+
+				{ defaultContent: "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fas fa-edit'></i></a>"+
 					"<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-trash'></i></i></a>"}                
 		  ]
     });
-  });
+
+    $('#usersTable tbody').on( 'click', 'a', async function () {
+	    let btnUser = $(this)[0].id;
+	    let dataRow = userTable.row( $(this).parents('tr') ).data();
+
+	    if(btnUser=='btnExcluir'){
+	        // if(await pergunta("Confirma a Exclusão deste registro ?")==true){
+	        //     excluirTabelasPrecos(dataRow.id)
+	        // }
+          alertConfirmation(
+            'Apagar Usuário?',
+            'Clique em "NÃO" para abortar a operação.',
+            'Usuário Apagado.',
+            'O usuário foi apagado com sucesso.',
+            'Operação abortada.',
+            'O usuário não foi apagado.'
+          )
+	    }else{
+	        setDataModal(dataRow.id);    
+	    }                    
+	});  
+  // });
 </script>
 </body>
 

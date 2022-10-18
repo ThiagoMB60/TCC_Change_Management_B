@@ -34,6 +34,8 @@ module.exports = class CRUDdao {
   };
   getOrderBy() { return };
 
+  getSelectFields() { return '*' };
+
 
   async inserir() {
     try {
@@ -55,7 +57,7 @@ module.exports = class CRUDdao {
   async buscar() {
     try {
       await database
-        .select()
+        .select(this.getSelectFields())
         .into(this.bdTabela)
         .where(this.getWhereClausesSearch())
         .whereRaw(this.getWhereRawClausesSearch())

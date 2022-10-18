@@ -51,7 +51,10 @@ ctrlUser.get("/", license.validaAutorizacao, async (req, res) => {
 });
 
 ctrlUser.get("/list", license.authAdm, async (req, res) => {
-  res.render("users", { session: req.session });
+  res.render("users", {
+    session: req.session,
+    modalMode: undefined
+  });
 });
 
 ctrlUser.get("/login", async (req, res) => {
