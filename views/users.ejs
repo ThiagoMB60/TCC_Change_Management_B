@@ -2,19 +2,44 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-    <div class="modal fade modal-lg" id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade " id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel"><%=modalMode%></h5>
+          <h5 class="modal-title" id="exampleModalLabel">Cadastro de Usuário</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id">
+          <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário">
+            <input id="iptuserMail" type="mail" class="form-control my-2" placeholder="Email">
+            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha">
+            <div class="row ms-1">
+              <div class="col-6">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserConvencional" checked>
+                  <label class="form-check-label" for="radioUserConvencional">
+                    Usuário convencional.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserAdministrador">
+                  <label class="form-check-label" for="radioUserAdministrador">
+                    Usuário administrador.
+                  </label>
+                </div>
+              </div>  
+              <div class="form-check col-6">
+                <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
+                <label class="form-check-label" for="flexCheckChecked">
+                  Usuário ativo.
+                </label>
+              </div>
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary">Salvar</button>
         </div>
       </div>
     </div>
@@ -24,7 +49,10 @@
     <div class="card border-dark mb-3 w-100 mt-5">
       <div class="card-header">Cadastros</div>
       <div class="card-body text-dark">
-        <h5 class="card-title">Usuários</h5>
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">Usuários</h5>
+          <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class="fa-solid fa-user-plus"></i></a>
+        </div>
         <table id ="usersTable" class="table table-sm table-bordered 
                                       table-striped table-hover table-secondary my-1">
           <thead>
@@ -63,96 +91,114 @@
           `O Usuário '${user.user}' não foi apagado.`
         );
         return;
-      }else{
-        console.log(user)
-        $.ajax({
-          url: "/user/deletar",
-          type: "post",
-          contentType: 'application/json',
-          headers: {
-            "Authorization": "Bearer " + '<%=session.token%>'
-          },
-          data: {
-            id : user.id,
-            user : '',
-            pass : '',
-            mail : '',
-            type : '',
-            active : '',
-          },  
-          success: function (result, textStatus, jQxhr) {
-            alertSuccess(
-              'Usuário apagado!',
-              `O usuário '${user.user}' foi apagado com sucesso.`
-            );
-          },
-          error: function (xhr, ajaxOptions, thrownError) {
-            console.log((xhr, ajaxOptions, thrownError))
-            alertError(
-              '** ERRO **',
-              `Falha ao apagar o usuário '${user.user}'.`
-            );
-          }
-        });
       }
+      $.ajax({
+        url: "/user/deletar",
+        type: "delete",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "id" : user.id,
+          "user" : '',
+          "pass" : '',
+          "mail" : '',
+          "type" : '',
+          "active" : '',
+        }),  
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Usuário apagado!',
+            `O usuário '${user.user}' foi apagado com sucesso.`
+          );
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao apagar o usuário '${user.user}'.`
+          );
+        }
+      });
+      
     })
     return;
   }
 
+  function clearModalUser(){
+    $("#iptUserId").val("");
+    $("#iptUserName").val("");
+    $("#iptuserMail").val("");
+    $("#iptUserPass").val("");
+    $("#checkUserAtivo").prop("checked", true);
+    $("#radioUserConvencional").attr("checked", true);
+    $("#radioUserAdministrador").attr("checked", false);
+  }
+
   function setDataModal(user){
+    if(!user) {
+      clearModalUser();
+      return;
+    }
+
 
   }
 
   let userTable =   $('#usersTable').DataTable({
-      "language": {
-        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
-      }, 
-      "paging": false,
-      "searching":false,
-      
-      ajax: function ( data, callback, settings ) { 
-        $.ajax({            
-            url: '/user/buscar' ,            
-            type: 'post',
-            contentType: 'application/json',
-            headers: {
-							"Authorization": "Bearer " + '<%=session.token%>'
-						},                   
-            success: function( arrUsers, textStatus, jQxhr ){            	
-                callback({
-                    // draw: data.draw,
-                    data: arrUsers.data,
-                    recordsTotal:  arrUsers.data.length,
-                    recordsFiltered:  arrUsers.data.length
-                });                              
-            },
-            error: function( jqXhr, textStatus, errorThrown ){
-                console.log(errorThrown)                
-            }
-        });
-      },
-      "serverSide":true,
-		  columns: [                
-				{ data: "user" },
-				{ data: "type" },	        
-				{ data: "mail" },	        
-				{ data: "active" },	        
-				{ defaultContent: "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fas fa-edit'></i></a>"+
-					"<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-trash'></i></i></a>"}                
-		  ]
-    });
+    "language": {
+      "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+    }, 
+    "paging": false,
+    "searching":false,
+    
+    ajax: function ( data, callback, settings ) { 
+      $.ajax({            
+        url: '/user/buscar' ,            
+        type: 'post',
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },                   
+        success: function( arrUsers, textStatus, jQxhr ){            	
+          callback({
+            // draw: data.draw,
+            data: arrUsers.data,
+            recordsTotal:  arrUsers.data.length,
+            recordsFiltered:  arrUsers.data.length
+          });                              
+        },
+        error: function( jqXhr, textStatus, errorThrown ){
+          console.log(errorThrown)                
+        }
+      });
+    },
+    "serverSide":true,
+    columns: [                
+      { data: "user" },
+      { data: "type" },	        
+      { data: "mail" },	        
+      { data: "active" },	        
+      { defaultContent: "<div class= 'd-flex justify-content-around'>" + 
+        "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fa-solid fa-user-pen'></i></a>"+
+        "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" + 
+        "</div>"
+      }                
+    ]
+  });
 
-    $('#usersTable tbody').on( 'click', 'a', async function () {
-	    let btnUser = $(this)[0].id;
-	    let dataRow = userTable.row( $(this).parents('tr') ).data();
+  $('#usersTable tbody').on( 'click', 'a', async function () {
+    let btnUser = $(this)[0].id;
+    let dataRow = userTable.row( $(this).parents('tr') ).data();
 
-	    if(btnUser=='btnExcluir'){
-          await deleteUser(dataRow)
-	    }else{
-	        setDataModal(dataRow.id);    
-	    }                    
+    if(btnUser=='btnExcluir'){
+      await deleteUser(dataRow)
+    }else{
+      setDataModal(dataRow);    
+    }                    
 	});  
-  // });
+
+  $("#btnNew").click(() => clearModalUser());
+
 </script>
 </body>
 
