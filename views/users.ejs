@@ -46,7 +46,56 @@
   
   <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
 <script>
-  // $(document).ready(function () {
+
+  async function deleteUser(user){
+    Swal({
+        title: "Apagar Usuário?",
+        text: "Ao clicar em 'OK' o usuário será apagado.",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Sim, apagar!",
+        closeOnConfirm: false
+    }, function (isConfirm) {
+        if (!isConfirm) {
+          return alertError(
+            'Operação abortada!',
+            `O Usuário${user.user}não foi apagado.`
+          );
+        }
+        $.ajax({
+            url: "user/deletar",
+            type: "POST",
+            data: {
+              id : user.id,
+              user : '',
+              pass : '',
+              mail : '',
+              type : '',
+              active : '',
+            },
+            dataType: "html",
+            success: function () {
+                alertSuccess(
+                  'Usuário apagado!',
+                  `O usuário${user.user} foi apagado com sucesso.`
+                );
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alertError(
+                  '** ERRO **',
+                  `Falha ao apagar o usuário${user.user}.`
+                );
+            }
+        });
+    });
+    return;
+  }
+
+  function setDataModal(user){
+
+  }
+
   let userTable =   $('#usersTable').DataTable({
       "language": {
         "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
@@ -91,17 +140,7 @@
 	    let dataRow = userTable.row( $(this).parents('tr') ).data();
 
 	    if(btnUser=='btnExcluir'){
-	        // if(await pergunta("Confirma a Exclusão deste registro ?")==true){
-	        //     excluirTabelasPrecos(dataRow.id)
-	        // }
-          alertConfirmation(
-            'Apagar Usuário?',
-            'Clique em "NÃO" para abortar a operação.',
-            'Usuário Apagado.',
-            'O usuário foi apagado com sucesso.',
-            'Operação abortada.',
-            'O usuário não foi apagado.'
-          )
+          await deleteUser(dataRow)
 	    }else{
 	        setDataModal(dataRow.id);    
 	    }                    

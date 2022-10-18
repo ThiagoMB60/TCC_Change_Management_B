@@ -17,40 +17,4 @@ function alertError(title, text) {
   })
 }
 
-function alertConfirmation(title, text, titleConfirmation, textConfirmation, titleAbort, textAbort) {
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: false
-  })
-
-  swalWithBootstrapButtons.fire({
-    title: title,
-    text: text,
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'SIM',
-    cancelButtonText: 'NÃO',
-    reverseButtons: true
-  }).then((result) => {
-    if (result.isConfirmed) {
-      swalWithBootstrapButtons.fire(
-        titleConfirmation,
-        textConfirmation,
-        'success'
-      )
-    } else if (
-      /* Read more about handling dismissals below */
-      result.dismiss === Swal.DismissReason.cancel
-    ) {
-      swalWithBootstrapButtons.fire(
-        titleAbort,
-        textAbort,
-        'error'
-      )
-    }
-  })
-}
 
