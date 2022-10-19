@@ -224,6 +224,7 @@
             'Usuário salvo!',
             `O usuário '${user.user}' foi salvo com sucesso.`
           );
+          userTable.ajax.reload();
         },
         error: function (xhr, ajaxOptions, thrownError) {
           alertError(
@@ -242,6 +243,9 @@
     "paging": false,
     "searching":false,
     "responsive": true,
+    scrollY: '300px',
+    scrollCollapse: true,
+    order: [[ 0, 'asc']],
     ajax: function ( data, callback, settings ) { 
       $.ajax({            
         url: '/user/buscar' ,            
@@ -273,8 +277,8 @@
         "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fa-solid fa-user-pen'></i></a>"+
         "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" + 
         "</div>"
-      }                
-    ]
+      },    
+    ],
   });
 
   $('#usersTable tbody').on( 'click', 'a', async function () {

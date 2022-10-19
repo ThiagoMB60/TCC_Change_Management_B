@@ -15,10 +15,22 @@ function instanciaUser(r) {
   );
 }
 
+function instanciaRequester(r) {
+  r.id,
+    r.name,
+    r.mail,
+    r.contact,
+    r.company,
+    r.comments
+}
+
 function instanciaModel(req) {
   if (req.baseUrl === '/user') {
     model = require('../models/mdlUser');
     return instanciaUser(req.body);
+  } else if (req.baseUrl === '/requester') {
+    model = require('../models/mdlRequester');
+    return instanciaRequester(req.body);
   }
 }
 

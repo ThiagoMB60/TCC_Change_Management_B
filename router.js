@@ -6,12 +6,14 @@ const ctrlUser = require("./src/controllers/ctrlUser");
 const ctrlIndex = require("./src/controllers/ctrlIndex");
 
 
-router.use("/", ctrlIndex);
-router.use("/user", ctrlCRUD);
-router.use("/user", ctrlUser);
-//================================================================
-//const ctrlFrontEnd = require("./src/controllers/controllerFront");
 
-// router.use("/application/user", ctrlUser);
+
+router.use("/user", ctrlCRUD);
+router.use("/requester", ctrlCRUD);
+
+//================================================================
+router.use("/", ctrlIndex);
+router.use("/user", ctrlUser);
+
 
 module.exports = router;
