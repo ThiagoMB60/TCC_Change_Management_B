@@ -11,9 +11,9 @@
         </div>
         <div class="modal-body">
           <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id" disabled>
-          <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário">
-            <input id="iptuserMail" type="mail" class="form-control my-2" placeholder="Email">
-            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha">
+          <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário" required>
+            <input id="iptUserMail" type="mail" class="form-control my-2" placeholder="Email" required>
+            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha" required>
             <div class="row ms-1">
               <div class="col-6">
                 <div class="form-check">
@@ -38,8 +38,8 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-primary">Salvar</button>
+          <button type="button" id="btnUserCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" id="btnUserSave" class="btn btn-primary">Salvar</button>
         </div>
       </div>
     </div>
@@ -86,8 +86,8 @@
         showCancelButton: true,
         cancelButtonText: 'Não, cancelar',
         confirmButtonText: "Sim, apagar!"
-    }).then(confirmation =>{
-      if (!confirmation.isConfirmed) {
+    }).then(decision =>{
+      if (!decision.isConfirmed) {
         alertError(
           'Operação abortada!',
           `O Usuário '${user.user}' não foi apagado.`
@@ -130,11 +130,11 @@
   function clearModalUser(){
     $("#iptUserId").val("");
     $("#iptUserName").val("");
-    $("#iptuserMail").val("");
+    $("#iptUserMail").val("");
     $("#iptUserPass").val("");
     $("#checkUserAtivo").prop("checked", true);
-    $("#radioUserConvencional").attr("checked", true);
-    $("#radioUserAdministrador").attr("checked", false);
+    $("#radioUserConvencional").prop("checked", true);
+    $("#radioUserAdministrador").prop("checked", false);
   }
 
   function setDataUserModal(user){
@@ -144,7 +144,7 @@
     }
     $("#iptUserId").val(user.id);
     $("#iptUserName").val(user.user);
-    $("#iptuserMail").val(user.mail);
+    $("#iptUserMail").val(user.mail);
     $("#iptUserPass").val(user.pass);
     $("#checkUserAtivo").prop("checked", user.active);
     
@@ -152,7 +152,58 @@
     if(user.type === 'ADM') userType = !userType;
     $("#radioUserConvencional").prop("checked", userType);
     $("#radioUserAdministrador").prop("checked", !userType);
+  }
 
+  function buildUser(){
+    let user = {};
+    user.id = $("#iptUserId").val();
+    user.user = $("#iptUserName").val();
+    user.mail = $("#iptUserMail").val();
+    user.pass = $("#iptUserPass").val();
+    user.active =$("#checkUserAtivo").prop('checked');
+    if($("#radioUserConvencional").prop('checked')){
+      user.type = 'USER'
+    }else{
+      user.type = 'ADM'
+    }
+
+    return user;
+  }
+
+  async function updateUser(user){
+
+  }
+
+  async function insertUser(user){
+    $.ajax({
+        url: "/user/inserir",
+        type: "post",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "id" : user.id,
+          "user" : user.user,
+          "pass" : user.pass,
+          "mail" : user.mail,
+          "type" : user.type,
+          "active" : user.active,
+        }),  
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Usuário salvo!',
+            `O usuário '${user.user}' foi salvo com sucesso.`
+          );
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao salvar o usuário '${user.user}'.`
+          );
+        }
+      });
+    return;
   }
 
   let userTable =   $('#usersTable').DataTable({
@@ -209,6 +260,32 @@
 	});  
 
   $("#btnNew").click(() => setDataUserModal());
+
+  $("#btnUserSave").click(async () => {
+    if($("#iptUserId").val()){
+      Swal.fire({
+        title: `Alterar usuário '${$("#iptUserName").val()}'?`,
+        text: "Ao clicar em 'OK' todos os dados do usuário serão alterados.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, alterar!"
+      }).then(async (decision) =>{
+        if (!decision.isConfirmed) {
+          return;
+        }
+        await updateUser(buildUser());
+      });
+    }else{
+      await insertUser(buildUser());
+    }
+    return setDataUserModal();
+  })
+
+
+  $("#btnUserCancel").click(() => {
+    return setDataUserModal();
+  })
 
 </script>
 </body>
