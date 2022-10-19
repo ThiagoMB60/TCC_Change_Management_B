@@ -1,0 +1,83 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar.ejs') %>
+
+<body>
+    <!-- <div class="modal fade " id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cadastro de Solicitantes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id" disabled>
+          <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário" required>
+            <input id="iptUserMail" type="mail" class="form-control my-2" placeholder="Email" required>
+            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha" required>
+            <div class="row ms-1">
+              <div class="col-6">
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserConvencional" checked>
+                  <label class="form-check-label" for="radioUserConvencional">
+                    Usuário convencional.
+                  </label>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserAdministrador">
+                  <label class="form-check-label" for="radioUserAdministrador">
+                    Usuário administrador.
+                  </label>
+                </div>
+              </div>  
+              <div class="form-check col-6">
+                <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
+                <label class="form-check-label" for="checkUserAtivo">
+                  Usuário ativo.
+                </label>
+              </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnUserCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" id="btnUserSave" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <div class="container from-control">
+    <div class="card border-dark mb-3 mt-5">
+      <div class="card-header">Cadastros</div>
+      <div class="card-body text-dark">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">Solicitantes</h5>
+          <a href='#' id='btnSolNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal' data-bs-target='#modalSolDados' ><i class="fa-solid fa-user-plus"></i></a>
+        </div>
+        <div class="table-responsive">
+          <table id ="solTable" class="table table-sm table-bordered 
+                                      table-striped table-hover table-secondary my-1">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Contato</th>
+                <th>Email</th>
+                <th>Empresa</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+  <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
+<script>
+
+</script>
+</body>
+
+<%- include('partials/footer.ejs') %>
