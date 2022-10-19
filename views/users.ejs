@@ -31,7 +31,7 @@
               </div>  
               <div class="form-check col-6">
                 <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
-                <label class="form-check-label" for="flexCheckChecked">
+                <label class="form-check-label" for="checkUserAtivo">
                   Usuário ativo.
                 </label>
               </div>
@@ -171,7 +171,36 @@
   }
 
   async function updateUser(user){
-
+    $.ajax({
+        url: "/user/alterar",
+        type: "put",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "id" : user.id,
+          "user" : user.user,
+          "pass" : user.pass,
+          "mail" : user.mail,
+          "type" : user.type,
+          "active" : user.active,
+        }),  
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Usuário alterado!',
+            `O usuário '${user.user}' foi alterado com sucesso.`
+          );
+          userTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao alterar o usuário '${user.user}'.`
+          );
+        }
+      });
+    return;
   }
 
   async function insertUser(user){
@@ -212,7 +241,7 @@
     }, 
     "paging": false,
     "searching":false,
-    
+    "responsive": true,
     ajax: function ( data, callback, settings ) { 
       $.ajax({            
         url: '/user/buscar' ,            
@@ -275,11 +304,13 @@
           return;
         }
         await updateUser(buildUser());
+        setDataUserModal();
+        return;
       });
     }else{
       await insertUser(buildUser());
-    }
-    return setDataUserModal();
+      return setDataUserModal();
+    }    
   })
 
 
