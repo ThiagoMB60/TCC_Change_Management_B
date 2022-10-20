@@ -8,7 +8,7 @@ const express = require("express");
 const ctrlRequester = express.Router();
 
 ctrlRequester.get("/list", license.validaAutorizacao, async (req, res) => {
-  return res.render("requesters");
+  return res.render("requesters", { session: req.session.token });
 });
 
 

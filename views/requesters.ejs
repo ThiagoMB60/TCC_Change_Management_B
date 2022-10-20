@@ -2,48 +2,38 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-    <!-- <div class="modal fade " id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade " id="modalRequesterDados" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Cadastro de Solicitantes</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <!-- ________________________________________________________ -->
         <div class="modal-body">
-          <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id" disabled>
-          <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário" required>
-            <input id="iptUserMail" type="mail" class="form-control my-2" placeholder="Email" required>
-            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha" required>
-            <div class="row ms-1">
-              <div class="col-6">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserConvencional" checked>
-                  <label class="form-check-label" for="radioUserConvencional">
-                    Usuário convencional.
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserAdministrador">
-                  <label class="form-check-label" for="radioUserAdministrador">
-                    Usuário administrador.
-                  </label>
-                </div>
-              </div>  
-              <div class="form-check col-6">
-                <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
-                <label class="form-check-label" for="checkUserAtivo">
-                  Usuário ativo.
-                </label>
-              </div>
-          </div>
+          <input id="iptRequesterId" type="text" class="form-control my-2" placeholder="Id" disabled>
+          <input id="iptRequesterName" type="text" class="form-control my-2" placeholder="Nome" required maxlength="50">
+          <input id="iptRequesterMail" type="mail" class="form-control my-2" placeholder="Email" required
+            maxlength="50">
+          <input id="iptRequesterContact" type="text" class="form-control my-2" placeholder="Telefones" required
+            maxlength="50">
+          <input id="iptRequesterCompany" type="text" class="form-control my-2" placeholder="Empresa (OPCIONAL)"
+            maxlength="50">
+          <textarea id="txaRequesterComments" type="text" class="form-control my-2" placeholder="Observações (OPCIONAL)"
+            maxlength="500">
+          </textarea>
         </div>
+
+        <!-- ________________________________________________________ -->
         <div class="modal-footer">
-          <button type="button" id="btnUserCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" id="btnUserSave" class="btn btn-primary">Salvar</button>
+          <button type="button" id="btnRequesterCancel" class="btn btn-secondary"
+            data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" id="btnRequesterSave" class="btn btn-primary">Salvar</button>
         </div>
       </div>
     </div>
-  </div> -->
+  </div>
 
   <div class="container from-control">
     <div class="card border-dark mb-3 mt-5">
@@ -51,10 +41,11 @@
       <div class="card-body text-dark">
         <div class="d-flex justify-content-between">
           <h5 class="card-title">Solicitantes</h5>
-          <a href='#' id='btnSolNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal' data-bs-target='#modalSolDados' ><i class="fa-solid fa-user-plus"></i></a>
+          <a href='#' id='btnRequesterNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
+            data-bs-target='#modalRequesterDados'><i class="fa-solid fa-user-plus"></i></a>
         </div>
         <div class="table-responsive">
-          <table id ="solTable" class="table table-sm table-bordered 
+          <table id="requesterTable" class="table table-sm table-bordered 
                                       table-striped table-hover table-secondary my-1">
             <thead>
               <tr>
@@ -73,11 +64,254 @@
     </div>
   </div>
 
-  
-  <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
-<script>
 
-</script>
+  <%-include('partials/libs.ejs') %>
+  <!--arquivo de import de libs genéricas-->
+  <script>
+
+    let requesterTable = $('#requesterTable').DataTable({
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+      },
+      "paging": false,
+      "searching": false,
+      "responsive": true,
+      scrollY: '300px',
+      scrollCollapse: true,
+      ajax: function (data, callback, settings) {
+        $.ajax({
+          url: '/requester/buscar',
+          type: 'post',
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          success: function (arrRequesters, textStatus, jQxhr) {
+            callback({
+              // draw: data.draw,
+              data: arrRequesters.data,
+              recordsTotal: arrRequesters.data.length,
+              recordsFiltered: arrRequesters.data.length
+            });
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+            console.log(errorThrown)
+          }
+        });
+      },
+      "serverSide": true,
+      columns: [
+        { data: "name" },
+        { data: "contact" },
+        { data: "mail" },
+        { data: "company" },
+        {
+          defaultContent: "<div class= 'd-flex justify-content-around'>" +
+            "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalRequesterDados' ><i class='fa-solid fa-user-pen'></i></a>" +
+            "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
+            "</div>"
+        },
+      ],
+    });
+
+    function requesterBuild() {
+      let requester = {};
+
+      requester.id = $("#iptRequesterId").val();
+      requester.name = $("#iptRequesterName").val();
+      requester.mail = $("#iptRequesterMail").val();
+      requester.contact = $("#iptRequesterContact").val();
+      requester.company = $("#iptRequesterCompany").val();
+      requester.comments = $("#txaRequesterComments").val();
+
+      return requester;
+    }
+
+    async function insertRequester(requester) {
+      $.ajax({
+        url: "/requester/inserir",
+        type: "post",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "id": requester.id,
+          "name": requester.name,
+          "mail": requester.mail,
+          "contact": requester.contact,
+          "company": requester.company,
+          "comments": requester.comments
+        }),
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Solicitante salvo!',
+            `O Solicitante '${requester.name}' foi salvo com sucesso.`
+          );
+          requesterTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao salvar o Solicitante '${requester.name}'.`
+          );
+        }
+      });
+      return;
+    }
+
+    $("#btnRequesterSave").click(async () => {
+      if ($("#iptRequesterId").val()) {
+        Swal.fire({
+          title: `Alterar Solicitante '${$("#iptRequesterName").val()}'?`,
+          text: "Ao clicar em 'OK' todos os dados do Solicitante serão alterados.",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: 'Não, cancelar',
+          confirmButtonText: "Sim, alterar!"
+        }).then(async (decision) => {
+          if (!decision.isConfirmed) {
+            return;
+          }
+          await updateRequester(requesterBuild());
+          setDataRequesterModal();
+          return;
+        });
+      } else {
+        await insertRequester(requesterBuild());
+        return setDataRequesterModal();
+      }
+    })
+
+    function setDataRequesterModal(requester) {
+      if (!requester) {
+        clearModalRequester();
+        return;
+      }
+      $("#iptRequesterId").val(requester.id);
+      $("#iptRequesterName").val(requester.name);
+      $("#iptRequesterMail").val(requester.mail);
+      $("#iptRequesterContact").val(requester.contact);
+      $("#iptRequesterCompany").val(requester.company);
+      $("#txaRequesterComments").val(requester.comments);
+
+      return;
+    }
+
+    function clearModalRequester() {
+      $("#iptRequesterId").val("");
+      $("#iptRequesterName").val("");
+      $("#iptRequesterMail").val("");
+      $("#iptRequesterContact").val("");
+      $("#iptRequesterCompany").val("");
+      $("#txaRequesterComments").val("");
+
+      return;
+    }
+
+    $("#btnRequesterNew").click(() => setDataRequesterModal());
+
+    $("#btnRequesterCancel").click(() => {
+      return setDataRequesterModal();
+    });
+
+    $('#requesterTable tbody').on('click', 'a', async function () {
+      let btnRequester = $(this)[0].id;
+      let dataRow = requesterTable.row($(this).parents('tr')).data();
+
+      if (btnRequester == 'btnExcluir') {
+        await deleteRequester(dataRow)
+      } else {
+        setDataRequesterModal(dataRow);
+      }
+      return;
+    });
+
+    async function deleteRequester(requester) {
+
+      Swal.fire({
+        title: `Apagar Solicitante '${requester.name}'?`,
+        text: "Ao clicar em 'OK' o Solicitante será apagado.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, apagar!"
+      }).then(decision => {
+        if (!decision.isConfirmed) {
+          alertError(
+            'Operação abortada!',
+            `O Solicitante '${requester.name}' não foi apagado.`
+          );
+          return;
+        }
+        $.ajax({
+          url: "/requester/deletar",
+          type: "delete",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: JSON.stringify({
+            "id": requester.id,
+            "name": '',
+            "mail": '',
+            "contact": '',
+            "company": '',
+            "comments": '',
+          }),
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Solicitante apagado!',
+              `O Solicitante '${requester.name}' foi apagado com sucesso.`
+            );
+            requesterTable.ajax.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alertError(
+              '** ERRO **',
+              `Falha ao apagar o Solicitante '${requester.name}'.`
+            );
+          }
+        });
+
+      })
+      return;
+    }
+
+    async function updateRequester(requester) {
+      $.ajax({
+        url: "/requester/alterar",
+        type: "put",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "id": requester.id,
+          "name": requester.name,
+          "mail": requester.mail,
+          "contact": requester.contact,
+          "company": requester.company,
+          "comments": requester.comments
+        }),
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Solicitante alterado!',
+            `O Solicitante '${requester.name}' foi alterado com sucesso.`
+          );
+          requesterTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao alterar o Solicitante '${requester.name}'.`
+          );
+        }
+      });
+      return;
+    }
+
+  </script>
 </body>
 
 <%- include('partials/footer.ejs') %>

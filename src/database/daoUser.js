@@ -29,6 +29,8 @@ module.exports = class DaoUser extends CRUDdao {
   //   return [this.bdId, this.bdUser, this.bdMail, this.bdType, this.bdActive]
   // };
 
+  getOrderBy() { return this.bdUser };
+
   getWhereClausesSearch() {
     let obj = {};
     if (this.obj.id) obj[this.bdId] = this.obj.id;

@@ -41,6 +41,8 @@ module.exports = class DaoRequester extends CRUDdao {
     return rawClauses;
   };
 
+  getOrderBy() { return this.bdName };
+
   getKeyToUpdate() {
     if (!this.obj.id) {
       utils.msgError(`Id para solicitante ${this.obj.name} não informado ou inválido.`);

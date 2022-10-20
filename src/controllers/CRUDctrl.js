@@ -16,12 +16,14 @@ function instanciaUser(r) {
 }
 
 function instanciaRequester(r) {
-  r.id,
+  return new model(
+    r.id,
     r.name,
     r.mail,
     r.contact,
     r.company,
     r.comments
+  );
 }
 
 function instanciaModel(req) {

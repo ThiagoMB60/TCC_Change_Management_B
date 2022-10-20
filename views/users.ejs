@@ -2,7 +2,7 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-    <div class="modal fade " id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade " id="modalUserDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -12,29 +12,29 @@
         <div class="modal-body">
           <input id="iptUserId" type="text" class="form-control my-2" placeholder="Id" disabled>
           <input id="iptUserName" type="text" class="form-control my-2" placeholder="Usuário" required>
-            <input id="iptUserMail" type="mail" class="form-control my-2" placeholder="Email" required>
-            <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha" required>
-            <div class="row ms-1">
-              <div class="col-6">
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserConvencional" checked>
-                  <label class="form-check-label" for="radioUserConvencional">
-                    Usuário convencional.
-                  </label>
-                </div>
-                <div class="form-check">
-                  <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserAdministrador">
-                  <label class="form-check-label" for="radioUserAdministrador">
-                    Usuário administrador.
-                  </label>
-                </div>
-              </div>  
-              <div class="form-check col-6">
-                <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
-                <label class="form-check-label" for="checkUserAtivo">
-                  Usuário ativo.
+          <input id="iptUserMail" type="mail" class="form-control my-2" placeholder="Email" required>
+          <input id="iptUserPass" type="password" class="form-control my-2" placeholder="Senha" required>
+          <div class="row ms-1">
+            <div class="col-6">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserConvencional" checked>
+                <label class="form-check-label" for="radioUserConvencional">
+                  Usuário convencional.
                 </label>
               </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="radioUserAdministrador">
+                <label class="form-check-label" for="radioUserAdministrador">
+                  Usuário administrador.
+                </label>
+              </div>
+            </div>
+            <div class="form-check col-6">
+              <input class="form-check-input" type="checkbox" value="" id="checkUserAtivo" checked>
+              <label class="form-check-label" for="checkUserAtivo">
+                Usuário ativo.
+              </label>
+            </div>
           </div>
         </div>
         <div class="modal-footer">
@@ -51,127 +51,130 @@
       <div class="card-body text-dark">
         <div class="d-flex justify-content-between">
           <h5 class="card-title">Usuários</h5>
-          <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class="fa-solid fa-user-plus"></i></a>
+          <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
+            data-bs-target='#modalUserDados'><i class="fa-solid fa-user-plus"></i></a>
         </div>
         <div class="table-responsive">
-          <table id ="usersTable" class="table table-sm table-bordered 
+          <table id="usersTable" class="table table-sm table-bordered 
                                       table-striped table-hover table-secondary my-1">
-          <thead>
-            <tr>
-              <th>Usuário</th>
-              <th>Tipo</th>
-              <th>Email</th>
-              <th>Ativo</th>
-              <th>Ação</th>
-            </tr>
-          </thead>
-          <tbody>
-          </tbody>
-        </table>
+            <thead>
+              <tr>
+                <th>Usuário</th>
+                <th>Tipo</th>
+                <th>Email</th>
+                <th>Ativo</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
-  
-  <%-include('partials/libs.ejs') %> <!--arquivo de import de libs genéricas-->
-<script>
 
-  async function deleteUser(user){
-    
-    Swal.fire({
+  <%-include('partials/libs.ejs') %>
+  <!--arquivo de import de libs genéricas-->
+  <script>
+
+    async function deleteUser(user) {
+
+      Swal.fire({
         title: `Apagar usuário '${user.user}'?`,
         text: "Ao clicar em 'OK' o usuário será apagado.",
         icon: "warning",
         showCancelButton: true,
         cancelButtonText: 'Não, cancelar',
         confirmButtonText: "Sim, apagar!"
-    }).then(decision =>{
-      if (!decision.isConfirmed) {
-        alertError(
-          'Operação abortada!',
-          `O Usuário '${user.user}' não foi apagado.`
-        );
-        return;
-      }
-      $.ajax({
-        url: "/user/deletar",
-        type: "delete",
-        contentType: 'application/json',
-        headers: {
-          "Authorization": "Bearer " + '<%=session.token%>'
-        },
-        data: JSON.stringify({
-          "id" : user.id,
-          "user" : '',
-          "pass" : '',
-          "mail" : '',
-          "type" : '',
-          "active" : '',
-        }),  
-        success: function (result, textStatus, jQxhr) {
-          alertSuccess(
-            'Usuário apagado!',
-            `O usuário '${user.user}' foi apagado com sucesso.`
-          );
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
+      }).then(decision => {
+        if (!decision.isConfirmed) {
           alertError(
-            '** ERRO **',
-            `Falha ao apagar o usuário '${user.user}'.`
+            'Operação abortada!',
+            `O Usuário '${user.user}' não foi apagado.`
           );
+          return;
         }
-      });
-      
-    })
-    return;
-  }
+        $.ajax({
+          url: "/user/deletar",
+          type: "delete",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: JSON.stringify({
+            "id": user.id,
+            "user": '',
+            "pass": '',
+            "mail": '',
+            "type": '',
+            "active": '',
+          }),
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Usuário apagado!',
+              `O usuário '${user.user}' foi apagado com sucesso.`
+            );
+            userTable.ajax.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alertError(
+              '** ERRO **',
+              `Falha ao apagar o usuário '${user.user}'.`
+            );
+          }
+        });
 
-  function clearModalUser(){
-    $("#iptUserId").val("");
-    $("#iptUserName").val("");
-    $("#iptUserMail").val("");
-    $("#iptUserPass").val("");
-    $("#checkUserAtivo").prop("checked", true);
-    $("#radioUserConvencional").prop("checked", true);
-    $("#radioUserAdministrador").prop("checked", false);
-  }
-
-  function setDataUserModal(user){
-    if(!user) {
-      clearModalUser();
+      })
       return;
     }
-    $("#iptUserId").val(user.id);
-    $("#iptUserName").val(user.user);
-    $("#iptUserMail").val(user.mail);
-    $("#iptUserPass").val(user.pass);
-    $("#checkUserAtivo").prop("checked", user.active);
-    
-    let userType = true;
-    if(user.type === 'ADM') userType = !userType;
-    $("#radioUserConvencional").prop("checked", userType);
-    $("#radioUserAdministrador").prop("checked", !userType);
-  }
 
-  function buildUser(){
-    let user = {};
-    user.id = $("#iptUserId").val();
-    user.user = $("#iptUserName").val();
-    user.mail = $("#iptUserMail").val();
-    user.pass = $("#iptUserPass").val();
-    user.active =$("#checkUserAtivo").prop('checked');
-    if($("#radioUserConvencional").prop('checked')){
-      user.type = 'USER'
-    }else{
-      user.type = 'ADM'
+    function clearModalUser() {
+      $("#iptUserId").val("");
+      $("#iptUserName").val("");
+      $("#iptUserMail").val("");
+      $("#iptUserPass").val("");
+      $("#checkUserAtivo").prop("checked", true);
+      $("#radioUserConvencional").prop("checked", true);
+      $("#radioUserAdministrador").prop("checked", false);
     }
 
-    return user;
-  }
+    function setDataUserModal(user) {
+      if (!user) {
+        clearModalUser();
+        return;
+      }
+      $("#iptUserId").val(user.id);
+      $("#iptUserName").val(user.user);
+      $("#iptUserMail").val(user.mail);
+      $("#iptUserPass").val(user.pass);
+      $("#checkUserAtivo").prop("checked", user.active);
 
-  async function updateUser(user){
-    $.ajax({
+      let userType = true;
+      if (user.type === 'ADM') userType = !userType;
+      $("#radioUserConvencional").prop("checked", userType);
+      $("#radioUserAdministrador").prop("checked", !userType);
+    }
+
+    function buildUser() {
+      let user = {};
+      user.id = $("#iptUserId").val();
+      user.user = $("#iptUserName").val();
+      user.mail = $("#iptUserMail").val();
+      user.pass = $("#iptUserPass").val();
+      user.active = $("#checkUserAtivo").prop('checked');
+      if ($("#radioUserConvencional").prop('checked')) {
+        user.type = 'USER'
+      } else {
+        user.type = 'ADM'
+      }
+
+      return user;
+    }
+
+    async function updateUser(user) {
+      $.ajax({
         url: "/user/alterar",
         type: "put",
         contentType: 'application/json',
@@ -179,13 +182,13 @@
           "Authorization": "Bearer " + '<%=session.token%>'
         },
         data: JSON.stringify({
-          "id" : user.id,
-          "user" : user.user,
-          "pass" : user.pass,
-          "mail" : user.mail,
-          "type" : user.type,
-          "active" : user.active,
-        }),  
+          "id": user.id,
+          "user": user.user,
+          "pass": user.pass,
+          "mail": user.mail,
+          "type": user.type,
+          "active": user.active,
+        }),
         success: function (result, textStatus, jQxhr) {
           alertSuccess(
             'Usuário alterado!',
@@ -200,11 +203,11 @@
           );
         }
       });
-    return;
-  }
+      return;
+    }
 
-  async function insertUser(user){
-    $.ajax({
+    async function insertUser(user) {
+      $.ajax({
         url: "/user/inserir",
         type: "post",
         contentType: 'application/json',
@@ -212,13 +215,13 @@
           "Authorization": "Bearer " + '<%=session.token%>'
         },
         data: JSON.stringify({
-          "id" : user.id,
-          "user" : user.user,
-          "pass" : user.pass,
-          "mail" : user.mail,
-          "type" : user.type,
-          "active" : user.active,
-        }),  
+          "id": user.id,
+          "user": user.user,
+          "pass": user.pass,
+          "mail": user.mail,
+          "type": user.type,
+          "active": user.active,
+        }),
         success: function (result, textStatus, jQxhr) {
           alertSuccess(
             'Usuário salvo!',
@@ -233,96 +236,115 @@
           );
         }
       });
-    return;
-  }
+      return;
+    }
 
-  let userTable =   $('#usersTable').DataTable({
-    "language": {
-      "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
-    }, 
-    "paging": false,
-    "searching":false,
-    "responsive": true,
-    scrollY: '300px',
-    scrollCollapse: true,
-    order: [[ 0, 'asc']],
-    ajax: function ( data, callback, settings ) { 
-      $.ajax({            
-        url: '/user/buscar' ,            
-        type: 'post',
-        contentType: 'application/json',
-        headers: {
-          "Authorization": "Bearer " + '<%=session.token%>'
-        },                   
-        success: function( arrUsers, textStatus, jQxhr ){            	
-          callback({
-            // draw: data.draw,
-            data: arrUsers.data,
-            recordsTotal:  arrUsers.data.length,
-            recordsFiltered:  arrUsers.data.length
-          });                              
+    let userTable = $('#usersTable').DataTable({
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+      },
+      "paging": false,
+      "searching": false,
+      "responsive": true,
+      scrollY: '300px',
+      scrollCollapse: true,
+      order: [[0, 'asc']],
+      ajax: function (data, callback, settings) {
+        $.ajax({
+          url: '/user/buscar',
+          type: 'post',
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          success: function (arrUsers, textStatus, jQxhr) {
+            callback({
+              // draw: data.draw,
+              data: arrUsers.data,
+              recordsTotal: arrUsers.data.length,
+              recordsFiltered: arrUsers.data.length
+            });
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+            console.log(errorThrown)
+          }
+        });
+      },
+      "serverSide": true,
+      "rowCallback": (row, data, displayIndex, displayIndexFull, dataIndex) => {
+        if (data.active == 1) {
+          $('td:eq(3)', row).html('ATIVO');
+        } else {
+          $('td:eq(3)', row).html('<span style="background-color: red">INATIVO</span>');
+        }
+      },
+      columns: [
+        { data: "user" },
+        { data: "type" },
+        { data: "mail" },
+        {
+          data: "active"
+          // ,
+          // "render": (data, type, row) => {
+          //   if (row.active == 1) {
+          //     return "ATIVO"
+          //   } else {
+          //     return "INATIVO"
+          //   }
+          // }
         },
-        error: function( jqXhr, textStatus, errorThrown ){
-          console.log(errorThrown)                
-        }
-      });
-    },
-    "serverSide":true,
-    columns: [                
-      { data: "user" },
-      { data: "type" },	        
-      { data: "mail" },	        
-      { data: "active" },	        
-      { defaultContent: "<div class= 'd-flex justify-content-around'>" + 
-        "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fa-solid fa-user-pen'></i></a>"+
-        "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" + 
-        "</div>"
-      },    
-    ],
-  });
 
-  $('#usersTable tbody').on( 'click', 'a', async function () {
-    let btnUser = $(this)[0].id;
-    let dataRow = userTable.row( $(this).parents('tr') ).data();
+        {
+          defaultContent: "<div class= 'd-flex justify-content-around'>" +
+            "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalUserDados' ><i class='fa-solid fa-user-pen'></i></a>" +
+            "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
+            "</div>"
+        },
+      ],
+    });
 
-    if(btnUser=='btnExcluir'){
-      await deleteUser(dataRow)
-    }else{
-      setDataUserModal(dataRow);    
-    }                    
-	});  
+    $('#usersTable tbody').on('click', 'a', async function () {
+      let btnUser = $(this)[0].id;
+      let dataRow = userTable.row($(this).parents('tr')).data();
 
-  $("#btnNew").click(() => setDataUserModal());
+      if (btnUser == 'btnExcluir') {
+        await deleteUser(dataRow)
+      } else {
+        setDataUserModal(dataRow);
+      }
+    });
 
-  $("#btnUserSave").click(async () => {
-    if($("#iptUserId").val()){
-      Swal.fire({
-        title: `Alterar usuário '${$("#iptUserName").val()}'?`,
-        text: "Ao clicar em 'OK' todos os dados do usuário serão alterados.",
-        icon: "warning",
-        showCancelButton: true,
-        cancelButtonText: 'Não, cancelar',
-        confirmButtonText: "Sim, alterar!"
-      }).then(async (decision) =>{
-        if (!decision.isConfirmed) {
+    $("#btnNew").click(() => setDataUserModal());
+
+    $("#btnUserSave").click(async () => {
+      if ($("#iptUserId").val()) {
+        Swal.fire({
+          title: `Alterar usuário '${$("#iptUserName").val()}'?`,
+          text: "Ao clicar em 'OK' todos os dados do usuário serão alterados.",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: 'Não, cancelar',
+          confirmButtonText: "Sim, alterar!"
+        }).then(async (decision) => {
+          if (!decision.isConfirmed) {
+            return;
+          }
+          await updateUser(buildUser());
+          setDataUserModal();
           return;
-        }
-        await updateUser(buildUser());
-        setDataUserModal();
-        return;
-      });
-    }else{
-      await insertUser(buildUser());
+        });
+      } else {
+        await insertUser(buildUser());
+        return setDataUserModal();
+      }
+    })
+
+
+    $("#btnUserCancel").click(() => {
       return setDataUserModal();
-    }    
-  })
+    })
 
-
-  $("#btnUserCancel").click(() => {
-    return setDataUserModal();
-  })
-
-</script>
+  </script>
 </body>
 
 <%- include('partials/footer.ejs') %>
