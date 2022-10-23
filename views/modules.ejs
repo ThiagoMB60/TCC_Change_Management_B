@@ -1,0 +1,269 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar.ejs') %>
+
+<body>
+  <div class="modal fade " id="modalModuleDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cadastro de Módulos do Sistema</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <input id="iptModulePrevious" type="text" class="form-control my-2" placeholder="ID" style="display: none">
+          <input id="iptModule" type="text" class="form-control my-2" placeholder="Nome do Módulo" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnModuleCancel" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" id="btnModuleSave" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container from-control">
+    <div class="card border-dark mb-3 mt-5">
+      <div class="card-header">Cadastros</div>
+      <div class="card-body text-dark">
+        <div class="d-flex justify-content-between">
+          <h5 class="card-title">Módulos</h5>
+          <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
+            data-bs-target='#modalModuleDados'><i class="fa-solid fa-square-plus"></i></a>
+        </div>
+        <div class="table-responsive">
+          <table id="modulesTable" class="table table-sm table-bordered 
+                                      table-striped table-hover table-secondary my-1">
+            <thead>
+              <tr>
+                <th>Módulo</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <%-include('partials/libs.ejs') %>
+  <!--arquivo de import de libs genéricas-->
+  <script>
+
+    async function deleteModule(module) {
+
+      Swal.fire({
+        title: `Apagar Módulo '${module.module}'?`,
+        text: "Ao clicar em 'OK' o módulo será apagado.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, apagar!"
+      }).then(decision => {
+        if (!decision.isConfirmed) {
+          alertError(
+            'Operação abortada!',
+            `O Módulo '${module.module}' não foi apagado.`
+          );
+          return;
+        }
+        $.ajax({
+          url: "/module/deletar",
+          type: "delete",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: JSON.stringify({
+            "module": module.module,
+          }),
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Módulo apagado!',
+              `O Módulo '${module.module}' foi apagado com sucesso.`
+            );
+            modulesTable.ajax.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alertError(
+              '** ERRO **',
+              `Falha ao apagar o Módulo '${module.module}'.`
+            );
+          }
+        });
+
+      })
+      return;
+    }
+
+    function clearModalModule() {
+      $("#iptModule").val("");
+      $("#iptModulePrevious").val("");
+    }
+
+    function setDataModuleModal(module) {
+      if (!module) {
+        clearModalModule();
+        return;
+      }
+      $("#iptModulePrevious").val(module.module);
+      $("#iptModule").val(module.module);
+    }
+
+    function buildModule() {
+      let module = {};
+      module.module = $("#iptModule").val();
+      module.previous = $("#iptModulePrevious").val()
+      return module;
+    }
+
+    async function updateModule(module) {
+      $.ajax({
+        url: "/module/alterar",
+        type: "put",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "module": module.module,
+          "previous": module.previous,
+        }),
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Módulo alterado!',
+            `O Módulo '${module.module}' foi alterado com sucesso.`
+          );
+          modulesTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao alterar o Módulo '${module.module}'.`
+          );
+        }
+      });
+      return;
+    }
+
+    async function insertModule(module) {
+      $.ajax({
+        url: "/module/inserir",
+        type: "post",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify({
+          "module": module.module,
+        }),
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Módulo salvo!',
+            `O Módulo '${module.module}' foi salvo com sucesso.`
+          );
+          modulesTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao salvar o Módulo '${module.module}'.`
+          );
+        }
+      });
+      return;
+    }
+
+    let modulesTable = $('#modulesTable').DataTable({
+      "language": {
+        "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+      },
+      "paging": false,
+      "searching": false,
+      "responsive": true,
+      scrollY: '300px',
+      scrollCollapse: true,
+      order: [[0, 'asc']],
+      ajax: function (data, callback, settings) {
+        $.ajax({
+          url: '/module/buscar',
+          type: 'post',
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          success: function (arrModules, textStatus, jQxhr) {
+            callback({
+              // draw: data.draw,
+              data: arrModules.data,
+              recordsTotal: arrModules.data.length,
+              recordsFiltered: arrModules.data.length
+            });
+          },
+          error: function (jqXhr, textStatus, errorThrown) {
+            console.log(errorThrown)
+          }
+        });
+      },
+      "serverSide": true,
+      columns: [
+        { data: "module" },
+        {
+          defaultContent: "<div class= 'd-flex justify-content-around'>" +
+            "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalModuleDados' ><i class='fa-solid fa-user-pen'></i></a>" +
+            "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
+            "<a href='#' id='btnInfo' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info'></i></a>" +
+            "</div>"
+        },
+      ],
+    });
+
+    $('#modulesTable tbody').on('click', 'a', async function () {
+      let btnModule = $(this)[0].id;
+      let dataRow = modulesTable.row($(this).parents('tr')).data();
+
+      if (btnModule == 'btnExcluir') {
+        await deleteModule(dataRow)
+      } else if (btnModule == 'btnEditar') {
+        setDataModuleModal(dataRow);
+      } else {
+        //implementar parte das versões dos módulos aqui
+      }
+    });
+
+    $("#btnNew").click(() => setDataModuleModal());
+
+    $("#btnModuleSave").click(async () => {
+      if ($("#iptModulePrevious").val()) {
+        Swal.fire({
+          title: `Alterar Módulo '${$("#iptModule").val()}'?`,
+          text: "Ao clicar em 'OK' todos os dados do Módulo serão alterados.",
+          icon: "warning",
+          showCancelButton: true,
+          cancelButtonText: 'Não, cancelar',
+          confirmButtonText: "Sim, alterar!"
+        }).then(async (decision) => {
+          if (!decision.isConfirmed) {
+            return;
+          }
+          await updateModule(buildModule());
+          setDataModuleModal();
+          return;
+        });
+      } else {
+        await insertModule(buildModule());
+        return setDataModuleModal();
+      }
+    })
+
+
+    $("#btnModuleCancel").click(() => {
+      return setDataModuleModal();
+    })
+
+  </script>
+</body>
+
+<%- include('partials/footer.ejs') %>

@@ -33,6 +33,9 @@ function instanciaModel(req) {
   } else if (req.baseUrl === '/requester') {
     model = require('../models/mdlRequester');
     return instanciaRequester(req.body);
+  } else if (req.baseUrl === '/module') {
+    model = require('../models/mdlModule');
+    return new model(req.body.module, req.body.previous);
   }
 }
 

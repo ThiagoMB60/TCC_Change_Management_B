@@ -34,7 +34,7 @@ module.exports = class DaoModule extends CRUDdao {
       utils.msgError(`Módulo ${this.obj.module} não informado ou inválido.`);
       throw `Módulo ${this.obj.module} não informado ou inválido.`;
     }
-    return { [this.bdModule]: this.obj.module }
+    return { [this.bdModule]: this.obj.previous }
   };
 
   getParamsToUpdate() {

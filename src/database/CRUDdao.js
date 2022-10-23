@@ -85,7 +85,10 @@ module.exports = class CRUDdao {
           }
           this.resposta = `Alteração efetuada com sucesso!`;
         })
-        .catch();
+        .catch((err) => {
+          utils.msgError(err);
+          throw err;
+        });
     } catch (error) {
       utils.msgError(error);
       throw error;
