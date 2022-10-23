@@ -6,22 +6,12 @@ module.exports = class DaoModule extends CRUDdao {
   constructor(objeto) {
     super(objeto);
     this.bdTabela = 'module';
-    this.bdId = 'id';
-    this.bdModule = 'name';
-    this.bdPass = 'pass';
-    this.bdMail = 'mail';
-    this.bdType = 'type';
-    this.bdActive = 'active';
+    this.bdModule = 'module';
   }
 
   getParamsInsert() {
     return {
-      [this.bdId]: this.obj.id,
-      [this.bdModule]: this.obj.user,
-      [this.bdPass]: this.obj.pass,
-      [this.bdMail]: this.obj.mail,
-      [this.bdType]: this.obj.type,
-      [this.bdActive]: this.obj.active
+      [this.bdModule]: this.obj.module,
     }
   }
 
@@ -32,58 +22,32 @@ module.exports = class DaoModule extends CRUDdao {
   getOrderBy() { return this.bdModule };
 
   getWhereClausesSearch() {
-    let obj = {};
-    if (this.obj.id) obj[this.bdId] = this.obj.id;
-    if (this.obj.mail) obj[this.bdMail] = this.obj.mail;
-    if (this.obj.type) obj[this.bdType] = this.obj.type;
-    if (this.obj.active || this.obj.active === false) obj[this.bdActive] = this.obj.active;
-    return obj;
+    return {};
   }
 
   getWhereRawClausesSearch() {
-    if (this.obj.user) return `${this.bdModule} like '%${this.obj.user}%'`
+    if (this.obj.module) return `${this.bdModule} like '%${this.obj.module}%'`
     else return "";
   }
   getKeyToUpdate() {
-    if (!this.obj.id) {
-      utils.msgError(`Id para usuário${this.obj.user}não informado ou inválido.`);
-      throw `Id para usuário${this.obj.user}não informado ou inválido.`;
+    if (!this.obj.module) {
+      utils.msgError(`Módulo ${this.obj.module} não informado ou inválido.`);
+      throw `Módulo ${this.obj.module} não informado ou inválido.`;
     }
-    return { [this.bdId]: this.obj.id }
+    return { [this.bdModule]: this.obj.module }
   };
 
   getParamsToUpdate() {
     return {
-      [this.bdModule]: this.obj.user,
-      [this.bdPass]: this.obj.pass,
-      [this.bdMail]: this.obj.mail,
-      [this.bdType]: this.obj.type,
-      [this.bdActive]: this.obj.active
+      [this.bdModule]: this.obj.module
     }
   }
 
   getKeyToDelete() {
-    return { [this.bdId]: this.obj.id }
+    return { [this.bdModule]: this.obj.module }
   };
 
   //exclusive routes
 
-  async buscarPorUsuario() {
-    try {
-      await database
-        .select()
-        .into(this.bdTabela)
-        .where({ [this.bdModule]: this.obj.user })
-        .then((result) => this.resposta = result)
-        .catch((err) => {
-          utils.msgError(err);
-          throw err;
-        });
-    } catch (error) {
-      utils.msgError(error)
-      throw error;
-    }
-    return this.resposta;
-  }
 
 }
