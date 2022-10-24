@@ -26,6 +26,15 @@ function instanciaRequester(r) {
   );
 }
 
+function instanciaVersion(r) {
+  return new model(
+    r.id,
+    r.version,
+    r.date,
+    r.module
+  );
+}
+
 function instanciaModel(req) {
   if (req.baseUrl === '/user') {
     model = require('../models/mdlUser');
@@ -36,6 +45,9 @@ function instanciaModel(req) {
   } else if (req.baseUrl === '/module') {
     model = require('../models/mdlModule');
     return new model(req.body.module, req.body.previous);
+  } else if (req.baseUrl === '/version') {
+    model = require('../models/mdlVersion');
+    return instanciaVersion(req.body);
   }
 }
 

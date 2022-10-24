@@ -35,7 +35,7 @@ module.exports = class DaoVersion extends CRUDdao {
 
   getOrderBy() {
     return {
-      column: [this.bdModule],
+      // column: [this.bdModule],
       column: [this.bdDate]
     }
   };
