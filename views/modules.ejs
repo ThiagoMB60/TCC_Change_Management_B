@@ -2,6 +2,7 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
+  <!-- MODAL DE MÓDULOS -->
   <div class="modal fade " id="modalModuleDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -20,6 +21,44 @@
       </div>
     </div>
   </div>
+  <!-- MODAL DE MÓDULOS -->
+
+  <!-- MODAL DE VERSÕES DO MÓDULO -->
+  <div class="modal fade" id="modalVersionsModule" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="titleVersionsModule"></h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table id="versionsModuleTable">
+            <thead>
+              <tr>
+                <th>Número da Versão</th>
+                <th>Data da Versão</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- MODAL DE VERSÕES DO MÓDULO -->
+
+  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
+  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
+
+
+
+
+
 
   <div class="container from-control">
     <div class="card border-dark mb-3 mt-5">
@@ -194,12 +233,12 @@
           headers: {
             "Authorization": "Bearer " + '<%=session.token%>'
           },
-          success: function (arrModules, textStatus, jQxhr) {
+          success: function (arrVersionsModule, textStatus, jQxhr) {
             callback({
               // draw: data.draw,
-              data: arrModules.data,
-              recordsTotal: arrModules.data.length,
-              recordsFiltered: arrModules.data.length
+              data: arrVersionsModule.data,
+              recordsTotal: arrVersionsModule.data.length,
+              recordsFiltered: arrVersionsModule.data.length
             });
           },
           error: function (jqXhr, textStatus, errorThrown) {
@@ -214,7 +253,7 @@
           defaultContent: "<div class= 'd-flex justify-content-around'>" +
             "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalModuleDados' ><i class='fa-solid fa-user-pen'></i></a>" +
             "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
-            "<a href='#' id='btnInfo' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info'></i></a>" +
+            "<a href='#' id='btnInfo' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info' data-bs-toggle='modal' data-bs-target='#modalVersionsModule'></i></a>" +
             "</div>"
         },
       ],
@@ -228,8 +267,8 @@
         await deleteModule(dataRow)
       } else if (btnModule == 'btnEditar') {
         setDataModuleModal(dataRow);
-      } else {
-        //implementar parte das versões dos módulos aqui
+      } else if (btnModule == 'btnInfo') { //bdnInfo aqui
+        showVersionsModuleModal(dataRow);
       }
     });
 
@@ -262,6 +301,67 @@
     $("#btnModuleCancel").click(() => {
       return setDataModuleModal();
     })
+
+    // ##############################################################
+    //versions Module implementation below
+    let versionsModalTable;
+    function setTitleVersionsModal(module) {
+      $("#titleVersionsModule").html(`Versões de ${module.module}`) //set the title modal title
+    }
+
+    function setTableVersionsOfModal(module) {
+      versionsModalTable = $('#versionsModuleTable').DataTable({
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+        },
+        "paging": false,
+        "searching": false,
+        "responsive": true,
+        scrollY: '300px',
+        scrollCollapse: true,
+        ajax: function (data, callback, settings) {
+          $.ajax({
+            url: '/version/buscar',
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+              "Authorization": "Bearer " + '<%=session.token%>'
+            },
+            data: { module: module.module },
+            success: function (arrVersionsModule, textStatus, jQxhr) {
+              callback({
+                // draw: data.draw,
+                data: arrVersionsModule.data,
+                recordsTotal: arrVersionsModule.data.length,
+                recordsFiltered: arrVersionsModule.data.length
+              });
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+              console.log(errorThrown)
+            }
+          });
+        },
+        "serverSide": true,
+        columns: [
+          { data: "version" },
+          { data: "date" },
+          {
+            defaultContent: "<div class= 'd-flex justify-content-around'>" +
+              "<a href='#' id='btnInfoVersion' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info'></i></a>" +
+              "</div>"
+          },
+        ],
+      });
+    }
+
+    function startVersionsModal(module) {
+      setTitleVersionsModal(module);
+      setTableVersionsOfModal(module);
+    }
+
+    function showVersionsModuleModal(module) {
+      startVersionsModal(module);
+    }
 
   </script>
 </body>
