@@ -5,63 +5,62 @@ const database = require("./database");
 module.exports = class DaoVersion extends CRUDdao {
   constructor(objeto) {
     super(objeto);
-    this.bdTabela = 'requester';
+    this.bdTabela = 'moduleversions';
     this.bdId = 'id';
-    this.bdName = 'name';
-    this.bdMail = 'mail';
-    this.bdContact = 'contact';
-    this.bdCompany = 'company';
-    this.bdComments = 'comments';
+    this.bdVersion = 'version';
+    this.bdDate = 'date';
+    this.bdModule = 'module';
   };
 
   getParamsInsert() {
     return {
       [this.bdId]: this.obj.id,
-      [this.bdName]: this.obj.name,
-      [this.bdMail]: this.obj.mail,
-      [this.bdContact]: this.obj.contact,
-      [this.bdCompany]: this.obj.company,
-      [this.bdComments]: this.obj.comments
+      [this.bdVersion]: this.obj.version,
+      [this.bdDate]: this.obj.date,
+      [this.bdModule]: this.obj.module,
     }
   };
 
   getWhereClausesSearch() {
     let obj = {};
     if (this.obj.id) obj[this.bdId] = this.obj.id;
+    if (this.obj.version) obj[this.bdVersion] = this.obj.version;
+    if (this.obj.module) obj[this.bdModule] = this.obj.module;
     return obj;
   };
 
   getWhereRawClausesSearch() {
-    let rawClauses = "";
-    if (this.obj.name) rawClauses += `${this.bdName} like '%${this.obj.name}%'`
-    if (this.obj.company) {
-      if (rawClauses !== "") rawClauses += " and ";
-      rawClauses += `${this.bdCompany} like '%${this.obj.company}%'`
-    }
-    return rawClauses;
+    return "";
   };
 
-  getOrderBy() { return this.bdName };
+  getOrderBy() {
+    return {
+      column: [this.bdModule],
+      column: [this.bdDate]
+    }
+  };
 
   getKeyToUpdate() {
     if (!this.obj.id) {
-      utils.msgError(`Id para solicitante ${this.obj.name} não informado ou inválido.`);
-      throw `Id para solicitante ${this.obj.name} não informado ou inválido.`;
+      utils.msgError(`Id para versão ${this.obj.version} não informado ou inválido.`);
+      throw `Id para versão ${this.obj.version} não informado ou inválido.`;
     }
     return { [this.bdId]: this.obj.id }
   };
 
   getParamsToUpdate() {
     return {
-      [this.bdName]: this.obj.name,
-      [this.bdMail]: this.obj.mail,
-      [this.bdContact]: this.obj.contact,
-      [this.bdCompany]: this.obj.company,
-      [this.bdComments]: this.obj.comments
+      [this.bdVersion]: this.obj.version,
+      [this.bdDate]: this.obj.date,
+      [this.bdModule]: this.obj.module,
     }
   };
 
   getKeyToDelete() {
+    if (!this.obj.id) {
+      utils.msgError(`Id para versão ${this.obj.version} não informado ou inválido.`);
+      throw `Id para versão ${this.obj.version} não informado ou inválido.`;
+    }
     return { [this.bdId]: this.obj.id }
   };
 }
