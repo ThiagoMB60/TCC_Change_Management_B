@@ -14,6 +14,8 @@ const ctrlModule = require("./src/controllers/ctrlModule");
 router.use("/user", ctrlCRUD);
 router.use("/requester", ctrlCRUD);
 router.use("/module", ctrlCRUD);
+router.use("/versions", ctrlCRUD);
+router.use("/version", ctrlCRUD);
 
 //================================================================
 router.use("/", ctrlIndex);
