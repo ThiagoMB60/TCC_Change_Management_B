@@ -2,7 +2,7 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
-  <!-- MODAL DE MÓDULOS -->
+  <!-- MODAL DE MÓDULOS ↓-->
   <div class="modal fade " id="modalModuleDados" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -21,72 +21,94 @@
       </div>
     </div>
   </div>
-  <!-- MODAL DE MÓDULOS -->
+  <!-- MODAL DE MÓDULOS ↑-->
 
   <!-- MODAL DE VERSÕES DO MÓDULO -->
-  <div class="modal fade" id="modalVersionsModule" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="titleVersionsModule"></h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="table-responsive">
-            <table id="versionsModuleTable" class="table table-sm table-bordered 
-                                                    table-striped table-hover table-secondary my-1">
-              <thead>
-                <tr>
-                  <th>Número da Versão</th>
-                  <th>Data da Versão</th>
-                  <th>Ação</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
+
+  <!-- MODAL DE VERSÕES DO MÓDULO -->
+
+  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
+
+  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
+
+  <div class="container from-control mt-5">
+    <div class="border-dark">
+      <ul class="nav nav-tabs nav-fill " id="myTab" role="tablist">
+        <li id="tabModules" class="nav-item" role="presentation">
+          <button class="nav-link active" id="modulesTab" data-bs-toggle="tab" data-bs-target="#cardModules"
+            type="button" role="tab" aria-controls="cardModules" aria-selected="true">Módulos</button>
+        </li>
+        <li id="tabVersions" class="nav-item" role="presentation">
+          <button class="nav-link" id="versionsModuletab" data-bs-toggle="tab" data-bs-target="#cardVersions"
+            type="button" role="tab" aria-controls="cardVersions" aria-selected="false" disabled>Versões</button>
+        </li>
+        <li id="tabChanges" class="nav-item" role="presentation">
+          <button class="nav-link" id="changesVersion" data-bs-toggle="tab" data-bs-target="#contact-tab-pane"
+            type="button" role="tab" aria-controls="contact-tab-pane" aria-selected="false" disabled>Alterações</button>
+        </li>
+      </ul>
+
+      <div class="tab-content" id="myTabContent">
+        <!-- card MODULES ↓↓ -->
+        <div id="cardModules" class="tab-pane fade show active" role="tabpanel" aria-labelledby="cardModules"
+          tabindex="0">
+          <div class="card mb-3 tab-content">
+            <div class="card-header">Cadastros</div>
+            <div class="card-body text-dark">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">Módulos</h5>
+                <a href='#' id='btnNewModule' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
+                  data-bs-target='#modalModuleDados'><i class="fa-solid fa-square-plus"></i></a>
+              </div>
+              <div class="table-responsive">
+                <table id="modulesTable" class="table table-sm table-bordered 
+                                      table-striped table-hover table-secondary my-1">
+                  <thead>
+                    <tr>
+                      <th>Módulo</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Sair</button>
+        <!-- card MODULES ↑↑ -->
+
+        <!-- card VERSIOS ↓↓ -->
+        <div id="cardVersions" class="tab-pane fade" role="tabpanel" aria-labelledby="cardVersions" tabindex="0">
+          <div class="card mb-3 tab-content">
+            <div class="card-header">Cadastros</div>
+            <div class="card-body text-dark">
+              <div class="d-flex justify-content-between">
+                <h5 class="card-title">Versões</h5>
+                <a href='#' id='btnNewModuleVersion' class='btn btn-default btn-primary 	btn-circle'
+                  data-bs-toggle='modal' data-bs-target='#'><i class="fa-solid fa-square-plus"></i></a>
+              </div>
+              <div class="table-responsive">
+                <table id="versionsModuleTable" class="table table-sm table-bordered 
+                                                      table-striped table-hover table-secondary my-1 w-100">
+                  <thead>
+                    <tr>
+                      <th>Número da Versão</th>
+                      <th>Data da Versão</th>
+                      <th>Ação</th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
         </div>
+        <!-- card VERSIOS ↑↑ -->
+
       </div>
     </div>
-  </div>
-  <!-- MODAL DE VERSÕES DO MÓDULO -->
 
-  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
-  <!-- MODAL DE INFORMAÇÕES DA VERSÃO DO MÓDULO -->
-
-
-
-
-
-
-  <div class="container from-control">
-    <div class="card border-dark mb-3 mt-5">
-      <div class="card-header">Cadastros</div>
-      <div class="card-body text-dark">
-        <div class="d-flex justify-content-between">
-          <h5 class="card-title">Módulos</h5>
-          <a href='#' id='btnNew' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
-            data-bs-target='#modalModuleDados'><i class="fa-solid fa-square-plus"></i></a>
-        </div>
-        <div class="table-responsive">
-          <table id="modulesTable" class="table table-sm table-bordered 
-                                      table-striped table-hover table-secondary my-1">
-            <thead>
-              <tr>
-                <th>Módulo</th>
-                <th>Ação</th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
   </div>
 
 
@@ -254,9 +276,9 @@
         { data: "module" },
         {
           defaultContent: "<div class= 'd-flex justify-content-around'>" +
-            "<a href='#' id='btnEditar' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalModuleDados' ><i class='fa-solid fa-user-pen'></i></a>" +
-            "<a href='#' id='btnExcluir' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
-            "<a href='#' id='btnInfo' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info' data-bs-toggle='modal' data-bs-target='#modalVersionsModule'></i></a>" +
+            "<a href='#' id='btnEditModule' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalModuleDados' ><i class='fa-solid fa-user-pen'></i></a>" +
+            "<a href='#' id='btnDeleteModule' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
+            "<a href='#' id='btnInfoModule' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info' ></i></a>" +
             "</div>"
         },
       ],
@@ -266,16 +288,25 @@
       let btnModule = $(this)[0].id;
       let dataRow = modulesTable.row($(this).parents('tr')).data();
 
-      if (btnModule == 'btnExcluir') {
+      if (btnModule == 'btnDeleteModule') {
         await deleteModule(dataRow)
-      } else if (btnModule == 'btnEditar') {
+      } else if (btnModule == 'btnEditModule') {
         setDataModuleModal(dataRow);
-      } else if (btnModule == 'btnInfo') { //bdnInfo aqui
+      } else if (btnModule == 'btnInfoModule') { //bdnInfo aqui
+        enableAndDisableTabs('tabVersions', 'cardVersions', 'tabModules', 'cardModules')
         showVersionsModuleModal(dataRow);
       }
     });
 
-    $("#btnNew").click(() => setDataModuleModal());
+    function enableAndDisableTabs(enableTab, enableCard, disableTab, disableCard) {
+      $(`#${disableTab} button`).attr('disabled', 'disabled').removeClass('active');
+      $(`#${disableCard}`).removeClass('show active');
+
+      $(`#${enableTab} button`).removeAttr('disabled',).addClass('active')
+      $(`#${enableCard}`).addClass('show active');
+    }
+
+    $("#btnNewModule").click(() => setDataModuleModal());
 
     $("#btnModuleSave").click(async () => {
       if ($("#iptModulePrevious").val()) {
@@ -307,20 +338,21 @@
 
     // ##############################################################
     //versions Module implementation below
-    let versionsModalTable;
-    function setTitleVersionsModal(module) {
-      $("#titleVersionsModule").html(`Versões de ${module.module}`) //set the title modal title
-    }
+    let versionsModuleTable;
+
+    // function setTitleVersionsModal(module) {
+    //   $("#titleVersionsModule").html(`Versões de ${module.module}`) //set the title modal title
+    // }
 
     function setTableVersionsOfModal(module) {
-      versionsModalTable = $('#versionsModuleTable').DataTable({
+      versionsModuleTable = $('#versionsModuleTable').DataTable({
         "language": {
           "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
         },
-        "paging": false,
-        "searching": false,
-        "responsive": true,
-        scrollY: '300px',
+        destroy: true,
+        paging: false,
+        searching: false,
+        responsive: true,
         scrollCollapse: true,
         ajax: function (data, callback, settings) {
           $.ajax({
@@ -349,21 +381,25 @@
             }
           });
         },
-        "serverSide": true,
+        serverSide: true,
         columns: [
           { data: "version" },
           { data: "date" },
           {
-            defaultContent: "<div class= 'd-flex justify-content-around'>" +
+            defaultContent: "<div class= ''>" +
+              "<a href='#' id='btnEditModuleVersion' class='btn btn-default btn-warning btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalDadosVersion' ><i class='fa-solid fa-pen-to-square'></i></a>" +
+              "<a href='#' id='btnDeleteModuleVersion' class='btn btn-default btn-danger btn-circle btn-sm mx-1'><i class='fa-solid fa-trash-can'></i></a>" +
               "<a href='#' id='btnInfoVersion' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info'></i></a>" +
               "</div>"
           },
         ],
       });
+
+
     }
 
     function startVersionsModal(module) {
-      setTitleVersionsModal(module);
+      // setTitleVersionsModal(module);
       setTableVersionsOfModal(module);
     }
 

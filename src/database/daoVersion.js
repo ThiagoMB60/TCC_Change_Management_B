@@ -34,10 +34,10 @@ module.exports = class DaoVersion extends CRUDdao {
   };
 
   getOrderBy() {
-    return {
-      // column: [this.bdModule],
-      column: [this.bdDate]
-    }
+    return [
+      { column: [this.bdModule] },
+      { column: [this.bdDate] }
+    ]
   };
 
   getKeyToUpdate() {
