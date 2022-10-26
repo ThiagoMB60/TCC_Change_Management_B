@@ -8,7 +8,11 @@ const express = require("express");
 const ctrlModule = express.Router();
 
 ctrlModule.get("/list", license.validaAutorizacao, async (req, res) => {
-  return res.render("modules", { session: req.session.token });
+  let modules = await new mdlModule().buscar();
+  return res.render("modules", {
+    session: req.session.token,
+    modules: modules
+  });
 });
 
 
