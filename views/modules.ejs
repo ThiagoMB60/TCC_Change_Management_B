@@ -26,11 +26,11 @@
 
   <!-- MODAL DE VERSÕES DO MÓDULO -->
 
-  <div class="modal fade " id="modalVersion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade " id="modalVersion" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Cadastro de Versão</h5>
+          <h5 class="modal-title" id="">Cadastro de Versão</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -439,7 +439,7 @@
           { data: "date" },
           {
             defaultContent: "<div class= ''>" +
-              "<a href='#' id='btnEditVersion' class='btn btn-default btn-warning btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalDadosVersion' ><i class='fa-solid fa-pen-to-square'></i></a>" +
+              "<a href='#' id='btnEditVersion' class='btn btn-default btn-warning btn-circle btn-sm'><i class='fa-solid fa-pen-to-square'></i></a>" +
               "<a href='#' id='btnDeleteVersion' class='btn btn-default btn-danger btn-circle btn-sm mx-1'><i class='fa-solid fa-trash-can'></i></a>" +
               "<a href='#' id='btnInfoVersion' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info'></i></a>" +
               "</div>"
@@ -475,55 +475,6 @@
       return new Date(date).toISOString().split('T')[0];
     }
 
-    async function showVersionModal(version) {
-      $("#modalVersion").modal("show");
-      if (version) {
-        $("#iptVersionId").val(version.id);
-        $("#iptVersionNumber").val(version.version);
-        $("#iptVersionDate").val(returnDate(version.date));
-        $("#slVersionModule").val($("#titleCardVersions").html());
-      }
-      return;
-    }
-
-    $('#cardVersions .card-body').on('click', 'a', async function () {
-      let dataRow = versionsTable.row($(this).parents('tr')).data();
-      console.log(dataRow)
-      if (this.id === 'btnBackToModules') {
-        changeTab('tabModules', 'cardModules', 'tabVersions', 'cardVersions');
-      } else if (this.id === 'btnNewVersion') {
-        clearVersionModal();
-        await showVersionModal();
-      } else if (this.id === 'btnEditVersion') {
-        await showVersionModal(dataRow);
-        //se confirmar update Versions
-        //reload Table
-        //clear modal
-      } else if (this.id === 'btnDeleteVersion') {
-        //swal pra confirmar 
-        //se confirmar deleta e reload
-        //se cancelar aborta
-      } else if (this.id === 'btnInfoVersion') {
-        //get numero da versao
-        //atualiza o title da change tab
-        changeTab('tabChanges', 'cardChanges', 'tabVersions', 'cardVersions');
-      }
-
-    });
-
-    $("#btnVersionSave").on('click', async () => {
-      if (!$("#iptVersionId").val()) {
-        await insertNewVersion(buildVersionObj());
-      } else {
-        await updateVersion(buildVersionObj());
-      }
-    })
-
-    $("#btnVersionCancel").on('click', () => {
-      clearVersionModal();
-    })
-
-
     async function insertNewVersion(version) {
       $.ajax({
         url: "/version/inserir",
@@ -555,11 +506,151 @@
       clearVersionModal();
     }
 
-    async function updateVersion(version) {
 
-      versionsTable.ajax.reload();
+    async function showVersionModal(version) {
+      $("#modalVersion").modal("show");
+      if (version) {
+        $("#iptVersionId").val(version.id);
+        $("#iptVersionNumber").val(version.version);
+        $("#iptVersionDate").val(returnDate(version.date));
+        $("#slVersionModule").val($("#titleCardVersions").html());
+      }
+      return;
+    }
+
+    $("#btnVersionCancel").on('click', () => {
+      clearVersionModal();
+    })
+
+    async function updateVersion(version) {
+      Swal.fire({
+        title: `Atualizar Versão '${version.version}'?`,
+        text: "Ao clicar em 'OK' todas as informações da versão serão sobrescritas.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, atualizar!"
+      }).then(decision => {
+        if (!decision.isConfirmed) {
+          alertError(
+            'Operação abortada!',
+            `A versão '${version.version}' não foi apagada.`
+          );
+          return;
+        }
+        $.ajax({
+          url: "/version/alterar",
+          type: "put",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: JSON.stringify({
+            id: version.id,
+            version: version.version,
+            date: version.date,
+            module: version.module,
+          }),
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Versão atualizada!',
+              `Aversão '${version.version}' foi atualizada com sucesso.`
+            );
+            versionsTable.ajax.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alertError(
+              '** ERRO **',
+              `Falha ao atualizar a versão '${version.version}'.`
+            );
+          }
+        });
+      })
       clearVersionModal();
     }
+
+
+    $("#btnVersionSave").on('click', async () => {
+      if (!$("#iptVersionId").val()) {
+        await insertNewVersion(buildVersionObj());
+      } else {
+        await updateVersion(buildVersionObj());
+      }
+    });
+
+    async function deleteVersion(version) {
+      Swal.fire({
+        title: `Apagar Versão '${version.version}'?`,
+        text: "Ao clicar em 'OK' a Versão será apagada.",
+        icon: "warning",
+        showCancelButton: true,
+        cancelButtonText: 'Não, cancelar',
+        confirmButtonText: "Sim, apagar!"
+      }).then(decision => {
+        if (!decision.isConfirmed) {
+          alertError(
+            'Operação abortada!',
+            `A Versão '${version.version}' não foi apagada.`
+          );
+          return;
+        }
+        $.ajax({
+          url: "/version/deletar",
+          type: "delete",
+          contentType: 'application/json',
+          headers: {
+            "Authorization": "Bearer " + '<%=session.token%>'
+          },
+          data: JSON.stringify({
+            id: version.id,
+            version: version.version,
+            date: version.date,
+            module: version.module
+          }),
+          success: function (result, textStatus, jQxhr) {
+            alertSuccess(
+              'Versão apagado!',
+              `A Versão '${version.version}' foi apagada com sucesso.`
+            );
+            versionsTable.ajax.reload();
+          },
+          error: function (xhr, ajaxOptions, thrownError) {
+            alertError(
+              '** ERRO **',
+              `Falha ao apagar a Versão '${version.version}'.`
+            );
+          }
+        });
+
+      })
+      return;
+    }
+
+
+    $('#cardVersions .card-body').on('click', 'a', async function () {
+      let dataRow = versionsTable.row($(this).parents('tr')).data();
+      // console.log(dataRow)
+      if (this.id === 'btnBackToModules') {
+        changeTab('tabModules', 'cardModules', 'tabVersions', 'cardVersions');
+      } else if (this.id === 'btnNewVersion') {
+        clearVersionModal();
+        await showVersionModal();
+
+      } else if (this.id === 'btnEditVersion') {
+        clearVersionModal();
+        await showVersionModal(dataRow);
+
+      } else if (this.id === 'btnDeleteVersion') {
+        await deleteVersion(dataRow);
+      } else if (this.id === 'btnInfoVersion') {
+        //get numero da versao
+        //atualiza o title da change tab
+        changeTab('tabChanges', 'cardChanges', 'tabVersions', 'cardVersions');
+      }
+
+    });
+
+
 
     // ########################## CHANGES SECTION #############################
     $('#cardChanges .card-body').on('click', 'a', async function () {
