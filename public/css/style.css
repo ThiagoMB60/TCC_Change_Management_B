@@ -7,6 +7,18 @@
 }
 
 #fundo-login{
-  /* width:100%; */
   height:100vh;
 }
+
+#contChanges{
+  position:relative;
+  width:100% !important; 
+  padding: 1%;
+  margin: 0;
+}
+
+#cardContent{
+  width: 98vw !important;
+  margin: 0;
+}
+

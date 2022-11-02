@@ -1,42 +1,35 @@
 const database = require("./database");
-const { msgError } = require("../functions/utils");
 const utils = require("../functions/utils")
 
-module.exports = class CRUDdao {
+module.exports = class DaoChange {
   constructor(objeto) {
+    this.obj = objeto;
     this.resposta;  //resposta para o model
-    this.obj = objeto; //
+
+    this.bdTableName = 'change';
+    this.bdId = 'id';
+    this.bdTitle = 'title';
+    this.bdRequester = 'requester';
+    this.bdBenefits = 'benefits';
+    this.bdNotImpEffects = 'not_imp_effec';
+    this.bdType = 'change_type';
+    this.bdModule = 'change_module';
+    this.bdOrigin = 'change_origin';
+    this.bdRelatedModules = 'related_modules';
+    this.bdDate = 'request_date';
+    this.bdChangeAssessment = 'change_assessment';
+    this.bdPeoples = 'people_involved';
+    this.bdRisks = 'impact_risks';
+    this.bdTrajectory = 'imp_trajectory';
+    this.bdStatus = 'change_status';
+    this.bdPriority = 'priority';
+    this.bdRecommendations = 'recommendations';
+    this.bdDeliveryForecast = 'delivery_forecast';
+    this.bdSuccess = 'success';
+    this.bdAfterImp = 'after_imp';
   }
 
-  getParamsInsert() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getWhereClausesSearch() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getWhereRawClausesSearch() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getKeyToUpdate() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getParamsToUpdate() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getKeyToDelete() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
-  getOrderBy() { return };
-
-  getSelectFields() { return '*' };
-
-
+  // INSERT SECTION ↓ ↓
   async inserir() {
     try {
       await database
@@ -53,7 +46,9 @@ module.exports = class CRUDdao {
     }
     return this.resposta;
   }
+  // INSERT SECTION ↑ ↑
 
+  // SEARCH SECTION ↓ ↓
   async buscar() {
     try {
       await database
@@ -73,7 +68,9 @@ module.exports = class CRUDdao {
     }
     return this.resposta;
   }
+  // SEARCH SECTION ↑ ↑
 
+  // UPDATE SECTION ↓ ↓
   async alterar() {
     try {
       await database(this.bdTabela)
@@ -95,7 +92,9 @@ module.exports = class CRUDdao {
     }
     return this.resposta;
   }
+  // UPDATE SECTION ↑ ↑
 
+  // DELETE SECTION ↓ ↓
   async deletar() {
     try {
       await database(this.bdTabela)
@@ -112,4 +111,5 @@ module.exports = class CRUDdao {
     }
     return this.resposta;
   }
-};
+  // DELETE SECTION ↑ ↑
+}

@@ -1,0 +1,100 @@
+<%- include('partials/header.ejs') %>
+<%- include('partials/navbar.ejs') %>
+
+<body>
+  <div class="" id="contChanges">
+    <div class="card border-dark mb-3 mt-5" id="cardContent">
+      <div class="card-header">Alterações</div>
+      <div class="card-body text-dark">
+        <div class="d-flex justify-content-between">
+          <h5 class="changeStageTitle">Alterações</h5>
+          <a href='#' id='btnNewChange' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
+            data-bs-target='#'><i class="fa-solid fa-user-plus"></i></a>
+        </div>
+
+        <ul class="nav nav-tabs nav-fill " id="myTab" role="tablist">
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link active" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button"
+              role="tab" aria-controls="" aria-selected="true">PENDENTES</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
+              aria-controls="" aria-selected="false">ACEITAS</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">REPROVADAS</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">IMPLEMENTAÇÃO</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">ESPERA</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">TESTES</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">DISPONÍVEIS</button>
+          </li>
+          <li id="" class="nav-item" role="presentation">
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+              aria-controls="" aria-selected="false">IMPLANTADAS</button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+          <div id="tabChanges" class="tab-pane fade show active" role="tabpanel" aria-labelledby="tabChanges"
+            tabindex="0">
+            <div class="card mb-3 tab-content">
+              <div class="card-body text-dark">
+                <div class="table-responsive">
+                  <table id="modulesTable" class="table table-sm table-bordered 
+                                      table-striped table-hover table-secondary my-1">
+                    <thead>
+                      <tr>
+                        <th>Alteração</th>
+                        <th>Prioridade</th>
+                        <th>Solicitante</th>
+                        <th>Data</th>
+                        <th>Usuário Responsável</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer"></div>
+      </div>
+    </div>
+
+
+
+
+
+    <%-include('partials/libs.ejs') %>
+    <!--arquivo de import de libs genéricas-->
+
+    <script>
+      let tableChanges;
+
+      async function getChanges(changeStatus) {
+
+      }
+
+
+
+
+
+    </script>
+</body>
+
+<%- include('partials/footer.ejs') %>
