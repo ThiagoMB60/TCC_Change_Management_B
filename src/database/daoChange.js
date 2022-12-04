@@ -6,19 +6,20 @@ module.exports = class DaoChange {
     this.obj = objeto;
     this.resposta;  //resposta para o model
 
-    this.bdTableName = 'change';
+    this.bdTabela = 'change';
     this.bdId = 'id';
     this.bdTitle = 'title';
     this.bdRequester = 'requester';
+    this.bdUser = 'user_creator';
     this.bdBenefits = 'benefits';
     this.bdNotImpEffects = 'not_imp_effec';
     this.bdType = 'change_type';
     this.bdModule = 'change_module';
     this.bdOrigin = 'change_origin';
-    this.bdRelatedModules = 'related_modules';
+    // this.bdRelatedModules = 'related_modules';
     this.bdDate = 'request_date';
     this.bdChangeAssessment = 'change_assessment';
-    this.bdPeoples = 'people_involved';
+    // this.bdPeoples = 'people_involved';
     this.bdRisks = 'impact_risks';
     this.bdTrajectory = 'imp_trajectory';
     this.bdStatus = 'change_status';
@@ -30,12 +31,38 @@ module.exports = class DaoChange {
   }
 
   // INSERT SECTION ↓ ↓
+  getParamsInsert() {
+    return {
+      [this.bdId]: this.obj.id,
+      [this.bdTitle]: this.obj.title,
+      [this.bdDescriptions]: this.obj.description,
+      [this.bdRequester]: this.obj.requester,
+      [this.bdBenefits]: this.obj.benefits,
+      [this.bdNotImpEffects]: this.obj.notImpEffects,
+      [this.bdType]: this.obj.type,
+      [this.bdModule]: this.obj.module,
+      [this.bdOrigin]: this.obj.origin,
+      [this.bdRelatedModules]: this.obj.relatedModules,
+      [this.bdDate]: this.obj.date,
+      [this.bdChangeAssessment]: this.obj.changeAssessment,
+      [this.bdPeoples]: this.obj.peoples,
+      [this.bdRisks]: this.obj.risks,
+      [this.bdTrajectory]: this.obj.trajectory,
+      [this.bdStatus]: this.obj.status,
+      [this.bdPriority]: this.obj.priority,
+      [this.bdRecommendations]: this.obj.recommendations,
+      [this.bdDeliveryForecast]: this.obj.deliveryForecast,
+      [this.bdSuccess]: this.obj.success,
+      [this.bdAfterImp]: this.obj.afterImp
+    }
+  }
+
   async inserir() {
     try {
       await database
         .insert(this.getParamsInsert())
         .into(this.bdTabela)
-        .then(() => this.resposta = `'${this.obj.constructor.name}' cadastrado com SUCESSO`)
+        .then(() => this.resposta = `'${this.obj.constructor.name}' cadastrada com SUCESSO`)
         .catch((err) => {
           utils.msgError(err);
           throw err;

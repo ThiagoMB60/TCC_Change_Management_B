@@ -8,7 +8,9 @@ module.exports = class Change extends CRUDModel {
   constructor(
     id,
     title,
+    description,
     requester,
+    user,
     benefits,
     notImpEffects,
     type,
@@ -32,7 +34,9 @@ module.exports = class Change extends CRUDModel {
     super(daoEntidade); //resposta, dao <-- atributos herdados
     this.id = id;             //STRING UUID FORMAT
     this.title = title;         //STRING
+    this.description = description;             //STRING
     this.requester = requester;             //STRING UUID FORMAT
+    this.user = user; //STRING UUID FORMAT
     this.benefits = benefits;             //STRING
     this.notImpEffects = notImpEffects; //STRING
     this.type = type;             //STRING

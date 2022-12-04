@@ -6,10 +6,10 @@
     <div class="card border-dark mb-3 mt-5" id="cardContent">
       <div class="card-header">Alterações</div>
       <div class="card-body text-dark">
-        <div class="d-flex justify-content-between">
+        <div class="d-flex justify-content-between mb-2">
           <h5 class="changeStageTitle">Alterações</h5>
           <a href='#' id='btnNewChange' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
-            data-bs-target='#'><i class="fa-solid fa-user-plus"></i></a>
+            data-bs-target='#changeModal'><i class="fa-solid fa-file-circle-plus"></i></a>
         </div>
 
         <ul class="nav nav-tabs nav-fill " id="myTab" role="tablist">
@@ -22,27 +22,27 @@
               aria-controls="" aria-selected="false">ACEITAS</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">REPROVADAS</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">IMPLEMENTAÇÃO</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">ESPERA</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">TESTES</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">DISPONÍVEIS</button>
           </li>
           <li id="" class="nav-item" role="presentation">
-            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#" type="button" role="tab"
+            <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">IMPLANTADAS</button>
           </li>
         </ul>
@@ -61,7 +61,8 @@
                         <th>Prioridade</th>
                         <th>Solicitante</th>
                         <th>Data</th>
-                        <th>Usuário Responsável</th>
+                        <th>Módulo</th>
+                        <th>Ação</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -75,26 +76,122 @@
         <div class="card-footer"></div>
       </div>
     </div>
+  </div>
+
+  <div class="modal fade modal-xl" id="changeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header py-1">
+          <h5 class="modal-title" id="">Cadastro de Alterações</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class=" d-flex">
+            <input id="chId" type="text" class="form-control my-1 me-1" placeholder="ID" disabled>
+            <input id="chDate" class='form-control ms-1 py-0' type="date">
+          </div>
+
+
+          <div class="d-flex my-1">
+            <div class="me-1 width33">
+              <small>Solicitante:</small>
+              <select id="chRequester" value="" class="form-select">
+                <% arrRequesters.forEach(requester => { %>
+                <option value="<%=requester.id%>">
+                  <%=requester.company%> - <%=requester.name%>
+                </option>
+                <% }); %>
+              </select>
+            </div>
+
+            <div class="mx-1 width33">
+              <small>Tipo de alteração:</small>
+              <select id="chType" class="form-select">
+                <option>CRIAÇÃO</option>
+                <option>EVOLUÇÃO</option>
+                <option>CORREÇÃO</option>
+              </select>
+            </div>
+
+            <div class="ms-1 width33">
+              <small>Origem da alteração:</small>
+              <select id='chOrigin' class="form-select">
+                <option>INTERNA</option>
+                <option>CLIENTE</option>
+                <option>EXTERNA</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="d-flex my-2">
+            <input id="chName" type="text" class="form-control me-1 " placeholder="Nome da alteração" required>
+            <select id="ch" class="form-select ms-1">
+              <% arrModules.forEach(module => { %>
+              <option>
+                <%=module.module%>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+
+          <!-- <input id="" type="date" class="form-control my-2" placeholder="Número da Versão" required> -->
+          <textarea class="form-control my-1" placeholder="Descrição da alteração" rows="3" id="floatingTextarea">
+          </textarea>
+          <div class="d-flex justify-content-between">
+            <textarea class="form-control me-1 my-1" placeholder="Benefícios" rows="2" id="floatingTextarea"></textarea>
+            <textarea class="form-control ms-1 my-1" placeholder="Efeitos da não implementação" rows="2"
+              id="floatingTextarea"></textarea>
+          </div>
+
+          <div class="mt-2">
+            <small>Serviços relacionados:</small>
+            <select class="form-select" size='3' multiple>
+              <option selected="true">NENHUM</option>
+              <% arrModules.forEach(module => { %>
+              <option>
+                <%=module.module%>
+              </option>
+              <% }); %>
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer py-1">
+          <button type="button" id="btnVersionCancel" class="btn btn-secondary"
+            data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" id="btnVersionSave" class="btn btn-primary">Salvar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 
 
 
 
-    <%-include('partials/libs.ejs') %>
-    <!--arquivo de import de libs genéricas-->
+  <%-include('partials/libs.ejs') %>
+  <!--arquivo de import de libs genéricas-->
 
-    <script>
-      let tableChanges;
+  <script>
+    let tableChanges;
 
-      async function getChanges(changeStatus) {
+    $('#chRequester').change(function () {
 
-      }
+      alert($(this).val());
+      // Do something for option "b"
+    });
+
+
+    async function getChanges(changeStatus) {
+
+    }
 
 
 
 
 
-    </script>
+  </script>
 </body>
 
 <%- include('partials/footer.ejs') %>

@@ -8,10 +8,6 @@ module.exports = class CRUDdao {
     this.obj = objeto; //
   }
 
-  getParamsInsert() {
-    msgError('Método não implementado na classe filha.', this.constructor.name)
-    throw `Método não implementado na classe filha. ${this.constructor.name}`
-  };
   getWhereClausesSearch() {
     msgError('Método não implementado na classe filha.', this.constructor.name)
     throw `Método não implementado na classe filha. ${this.constructor.name}`
@@ -37,9 +33,13 @@ module.exports = class CRUDdao {
   getSelectFields() { return '*' };
 
 
-  async inserir() {
+  getParamsInsert() { //método abstrato para obter os parâmetros para inserção
+    msgError('Método não implementado na classe filha.', this.constructor.name)
+    throw `Método não implementado na classe filha. ${this.constructor.name}`
+  };
+  async inserir() { //método de inserção
     try {
-      await database
+      await database //objeto knex representante do banco de dados
         .insert(this.getParamsInsert())
         .into(this.bdTabela)
         .then(() => this.resposta = `'${this.obj.constructor.name}' cadastrado com SUCESSO`)
