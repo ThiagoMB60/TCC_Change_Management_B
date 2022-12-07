@@ -22,7 +22,9 @@ ctrlChange.get("/list", license.validaAutorizacao, async (req, res) => {
     session: req.session.token,
     // arrUsers: users,
     arrRequesters: requesters,
-    arrModules: modules
+    arrModules: modules,
+    userType: res.locals.userType,
+    userId: res.locals.userId
   });
 });
 

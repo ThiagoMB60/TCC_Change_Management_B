@@ -37,7 +37,28 @@ function instanciaVersion(r) {
 
 function instanciaChange(r) {
   return new model(
-
+    r.id,
+    r.title,
+    r.description,
+    r.requester,
+    r.user_creator,
+    r.benefits,
+    r.not_imp_effec,
+    r.change_type,
+    r.change_module,
+    r.change_origin,
+    r.request_date,
+    r.change_assessment,
+    r.impact_risks,
+    r.imp_trajectory,
+    r.change_status,
+    r.priority,
+    r.recommendations,
+    r.delivery_forecast,
+    r.success,
+    r.after_imp,
+    r.persons,
+    r.relatedModules,
   );
 }
 

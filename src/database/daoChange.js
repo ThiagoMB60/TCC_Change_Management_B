@@ -9,6 +9,7 @@ module.exports = class DaoChange {
     this.bdTabela = 'change';
     this.bdId = 'id';
     this.bdTitle = 'title';
+    this.bdDescriptions = 'description'
     this.bdRequester = 'requester';
     this.bdUser = 'user_creator';
     this.bdBenefits = 'benefits';
@@ -37,15 +38,16 @@ module.exports = class DaoChange {
       [this.bdTitle]: this.obj.title,
       [this.bdDescriptions]: this.obj.description,
       [this.bdRequester]: this.obj.requester,
+      [this.bdUser]: this.obj.user,
       [this.bdBenefits]: this.obj.benefits,
       [this.bdNotImpEffects]: this.obj.notImpEffects,
       [this.bdType]: this.obj.type,
       [this.bdModule]: this.obj.module,
       [this.bdOrigin]: this.obj.origin,
-      [this.bdRelatedModules]: this.obj.relatedModules,
+      // [this.bdRelatedModules]: this.obj.relatedModules,
       [this.bdDate]: this.obj.date,
       [this.bdChangeAssessment]: this.obj.changeAssessment,
-      [this.bdPeoples]: this.obj.peoples,
+      // [this.bdPeoples]: this.obj.peoples,
       [this.bdRisks]: this.obj.risks,
       [this.bdTrajectory]: this.obj.trajectory,
       [this.bdStatus]: this.obj.status,
@@ -55,6 +57,26 @@ module.exports = class DaoChange {
       [this.bdSuccess]: this.obj.success,
       [this.bdAfterImp]: this.obj.afterImp
     }
+  }
+
+  getSelectFields() {
+    return '*'
+  }
+
+  getWhereClausesSearch() {
+
+    utils.msgWarning(this.obj.status)
+    let obj = {}
+    if (this.obj.status) obj[this.bdStatus] = this.obj.status;
+    return obj;
+  }
+
+  getWhereRawClausesSearch() {
+    return "";
+  }
+
+  getOrderBy() {
+    return 'priority';
   }
 
   async inserir() {
@@ -79,12 +101,14 @@ module.exports = class DaoChange {
   async buscar() {
     try {
       await database
+        .join('requesters', 'change.requester', '=', 'requesters.id')
         .select(this.getSelectFields())
         .into(this.bdTabela)
         .where(this.getWhereClausesSearch())
         .whereRaw(this.getWhereRawClausesSearch())
-        .orderBy(this.getOrderBy())
+        .orderBy(this.getOrderBy()).debug()
         .then((result) => this.resposta = result)
+
         .catch((err) => {
           utils.msgError(err);
           throw err;
@@ -93,6 +117,7 @@ module.exports = class DaoChange {
       utils.msgError(error)
       throw error;
     }
+    console.log(this.resposta);
     return this.resposta;
   }
   // SEARCH SECTION ↑ ↑

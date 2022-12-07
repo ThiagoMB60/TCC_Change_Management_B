@@ -5,7 +5,7 @@ const database = require("./database");
 module.exports = class DaoRequester extends CRUDdao {
   constructor(objeto) {
     super(objeto);
-    this.bdTabela = 'requester';
+    this.bdTabela = 'requesters';
     this.bdId = 'id';
     this.bdName = 'name';
     this.bdMail = 'mail';

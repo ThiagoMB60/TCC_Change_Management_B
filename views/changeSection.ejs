@@ -2,6 +2,9 @@
 <%- include('partials/navbar.ejs') %>
 
 <body>
+  <input type="text" id="userId" value="<%=userId%>" style="display: none">
+  <input id="userType" value="<%=userType%>" style="display: none">
+
   <div class="" id="contChanges">
     <div class="card border-dark mb-3 mt-5" id="cardContent">
       <div class="card-header">Alterações</div>
@@ -9,39 +12,39 @@
         <div class="d-flex justify-content-between mb-2">
           <h5 class="changeStageTitle">Alterações</h5>
           <a href='#' id='btnNewChange' class='btn btn-default btn-primary 	btn-circle' data-bs-toggle='modal'
-            data-bs-target='#changeModal'><i class="fa-solid fa-file-circle-plus"></i></a>
+            data-bs-target='#newChangeModal'><i class="fa-solid fa-file-circle-plus"></i></a>
         </div>
 
         <ul class="nav nav-tabs nav-fill " id="myTab" role="tablist">
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabPendente" class="nav-item" role="presentation">
             <button class="nav-link active" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button"
               role="tab" aria-controls="" aria-selected="true">PENDENTES</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabAceita" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">ACEITAS</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabRejeitada" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
-              aria-controls="" aria-selected="false">REPROVADAS</button>
+              aria-controls="" aria-selected="false">REJEITADA</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabImplementacao" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">IMPLEMENTAÇÃO</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabEspera" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">ESPERA</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabTeste" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">TESTES</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabDisponivel" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">DISPONÍVEIS</button>
           </li>
-          <li id="" class="nav-item" role="presentation">
+          <li id="tabImplantada" class="nav-item" role="presentation">
             <button class="nav-link" id="" data-bs-toggle="tab" data-bs-target="#tabChanges" type="button" role="tab"
               aria-controls="" aria-selected="false">IMPLANTADAS</button>
           </li>
@@ -53,7 +56,7 @@
             <div class="card mb-3 tab-content">
               <div class="card-body text-dark">
                 <div class="table-responsive">
-                  <table id="modulesTable" class="table table-sm table-bordered 
+                  <table id="tableChanges" class="table table-sm table-bordered 
                                       table-striped table-hover table-secondary my-1">
                     <thead>
                       <tr>
@@ -61,7 +64,7 @@
                         <th>Prioridade</th>
                         <th>Solicitante</th>
                         <th>Data</th>
-                        <th>Módulo</th>
+                        <!-- <th>Módulo</th> -->
                         <th>Ação</th>
                       </tr>
                     </thead>
@@ -78,7 +81,7 @@
     </div>
   </div>
 
-  <div class="modal fade modal-xl" id="changeModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade modal-xl" id="newChangeModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header py-1">
@@ -126,7 +129,7 @@
 
           <div class="d-flex my-2">
             <input id="chName" type="text" class="form-control me-1 " placeholder="Nome da alteração" required>
-            <select id="ch" class="form-select ms-1">
+            <select id="chModule" class="form-select ms-1">
               <% arrModules.forEach(module => { %>
               <option>
                 <%=module.module%>
@@ -135,19 +138,18 @@
             </select>
           </div>
 
-          <!-- <input id="" type="date" class="form-control my-2" placeholder="Número da Versão" required> -->
-          <textarea class="form-control my-1" placeholder="Descrição da alteração" rows="3" id="floatingTextarea">
+          <!-- <input id="" type="date" class="form-control my-2" placeholder="Número da Alteração" required> -->
+          <textarea id='chDescription' class="form-control my-1" placeholder="Descrição da alteração" rows="3">
           </textarea>
           <div class="d-flex justify-content-between">
-            <textarea class="form-control me-1 my-1" placeholder="Benefícios" rows="2" id="floatingTextarea"></textarea>
-            <textarea class="form-control ms-1 my-1" placeholder="Efeitos da não implementação" rows="2"
-              id="floatingTextarea"></textarea>
+            <textarea id="chBenefits" class="form-control me-1 my-1" placeholder="Benefícios" rows="2" id=></textarea>
+            <textarea id="chEffects" class="form-control ms-1 my-1" placeholder="Efeitos da não implementação"
+              rows="2"></textarea>
           </div>
 
           <div class="mt-2">
             <small>Serviços relacionados:</small>
-            <select class="form-select" size='3' multiple>
-              <option selected="true">NENHUM</option>
+            <select id="chRelated" class="form-select" size='3' multiple>
               <% arrModules.forEach(module => { %>
               <option>
                 <%=module.module%>
@@ -158,38 +160,320 @@
         </div>
 
         <div class="modal-footer py-1">
-          <button type="button" id="btnVersionCancel" class="btn btn-secondary"
+          <button type="button" id="btnNewChangeCancel" class="btn btn-secondary"
             data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" id="btnVersionSave" class="btn btn-primary">Salvar</button>
+          <button type="submit" id="btnNewChangeSave" class="btn btn-primary">Salvar</button>
         </div>
       </div>
     </div>
   </div>
+  <!-- @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ -->
+
+  <div class="modal fade modal-xl" id="infoChangeModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header py-1">
+          <h5 class="modal-title" id="">Informação da Alteração</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class=" d-flex">
+            <input id="infochId" type="text" class="form-control my-1 me-1" disabled>
+            <input id="infochDate" class='form-control ms-1 py-0' type="date">
+          </div>
 
 
+          <div class="d-flex my-1">
+            <div class="me-1 width33">
+              <small>Solicitante:</small>
+              <input id="infochRequester" type="text" class="form-control my-1 me-1" disabled>
+            </div>
 
+            <div class="mx-1 width33">
+              <small>Tipo de alteração:</small>
+              <input id="infochType" type="text" class="form-control my-1 me-1" disabled>
+            </div>
 
+            <div class="ms-1 width33">
+              <small>Origem da alteração:</small>
+              <input id="infochOrigin" type="text" class="form-control my-1 me-1" disabled>
+            </div>
+          </div>
 
+          <div class="d-flex my-2">
+            <input id="infochName" type="text" class="form-control me-1 ">
+            <input id="infochModule" type="text" class="form-control my-1 me-1">
+          </div>
+
+          <!-- <input id="" type="date" class="form-control my-2" placeholder="Número da Alteração" required> -->
+          <textarea id='infochDescription' class="form-control my-1" placeholder="Descrição da alteração" rows="3">
+        </textarea>
+          <div class="d-flex justify-content-between">
+            <textarea id="infochBenefits" class="form-control me-1 my-1" placeholder="Benefícios" rows="2"
+              id=></textarea>
+            <textarea id="infochEffects" class="form-control ms-1 my-1" placeholder="Efeitos da não implementação"
+              rows="2"></textarea>
+          </div>
+
+          <div class="mt-2">
+            <small>Serviços relacionados:</small>
+            <input id="infochRelated" type="text" class="form-control my-1 me-1">
+          </div>
+
+          <!-- ########################################################################### -->
+          <div class="d-flex justify-content-between">
+            <textarea id="infochAvaliacao" class="form-control me-1 my-1" placeholder="Avaliação da mudança" rows="2"
+              id=></textarea>
+            <textarea id="infochPessoas" class="form-control ms-1 my-1" placeholder="Pessoas envolvidas"
+              rows="2"></textarea>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <textarea id="infochRiscos" class="form-control me-1 my-1" placeholder="Impacto e riscos previstos" rows="2"
+              id=></textarea>
+            <textarea id="infochTrajetoria" class="form-control ms-1 my-1" placeholder="Trajetória de implementação"
+              rows="2"></textarea>
+          </div>
+
+          <div class="d-flex my-1">
+            <div class="ms-1 width33">
+              <small>Prioridade:</small>
+              <select id='chPrioridade' class="form-select">
+                <option>BAIXA</option>
+                <option>NORMAL</option>
+                <option>ALTA</option>
+              </select>
+            </div>
+
+            <div class="mx-1 width33">
+              <small>Status da Mudança:</small>
+              <select id="chStatus" class="form-select">
+                <option>PENDENTE</option>
+                <option>ACEITA</option>
+                <option>EM IMPLEMENTAÇÃO</option>
+                <option>EM ESPERA</option>
+                <option>EM TESTES</option>
+                <option>DISPONÍVEL</option>
+                <option>IMPLANTADA</option>
+              </select>
+            </div>
+
+            <div class="ms-1 width33">
+              <small>Previsão de entrega:</small>
+              <input id="infochPrevisao" type="date" class="form-control">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-footer py-1">
+          <button type="button" id="infobtnCancel" class="btn btn-secondary" data-bs-dismiss="modal">Voltar</button>
+          <button type="submit" id="infobtnNewChangeSave" class="btn btn-primary">IMPLEMENTAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <%-include('partials/libs.ejs') %>
   <!--arquivo de import de libs genéricas-->
 
   <script>
     let tableChanges;
 
-    $('#chRequester').change(function () {
+    function showChangeInfoModal(change) {
+      $('#infochId').val(change.id);
+      $('#infochDate').val(new Date(change.request_date).toISOString().substr(0, 10));
+      $('#infochRequester').val(change.name);
+      $('#infochType').val(change.change_type);
+      $('#infochOrigin').val(change.change_origin);
+      $('#infochName').val(change.name);
+      $('#infochModule').val(change.change_module);
+      $('#infochDescription').val(change.description);
+      $('#infochBenefits').val(change.benefits);
+      $('#infochEffects').val(change.not_imp_effec);
+      $('#infochRelated').val(change.related);
+    }
 
-      alert($(this).val());
-      // Do something for option "b"
+    $('#tableChanges tbody').on('click', 'a', function () {
+      let btnChange = $(this)[0].id;
+      let dataRow = tableChanges.row($(this).parents('tr')).data();
+
+      // console.log(dataRow);
+      if (btnChange == 'btnInfoChange') {
+        showChangeInfoModal(dataRow)
+      }
     });
 
+    // $('#btnInfoChange').click(() => {
+    //   showChangeInfoModal(change)
+    // })
 
-    async function getChanges(changeStatus) {
+    function setNewChangeModal() {
 
+      $('#chId').val("");
+      $('#chDate').val(new Date().toISOString().substr(0, 10));
+      $('#chRequester').val("");
+      $('#chType').val("");
+      $('#chOrigin').val("");
+      $('#chName').val("");
+      $('#chModule').val("");
+      $('#chDescription').val("");
+      $('#chBenefits').val("");
+      $('#chEffects').val("");
+      $('#chRelated').val("");
     }
 
 
+    $('#btnNewChange').on('click', function () {
+      setNewChangeModal();
+    })
 
+    function buildChangeObj() {
+      let changeObj = {
+        id: $('#chId').val(),
+        title: $('#chName').val(),
+        description: $('#chDescription').val(),
+        requester: $('#chRequester').val(),
+        user_creator: $('#userId').val(),
+        benefits: $('#chBenefits').val(),
+        not_imp_effec: $('#chEffects').val(),
+        change_type: $('#chType').val(),
+        change_module: $('#chModule').val(),
+        change_origin: $('#chOrigin').val(),
+        request_date: $('#chDate').val(),
+        change_assessment: '',
+        impact_risks: '',
+        imp_trajectory: '',
+        change_status: '',
+        priority: '',
+        recommendations: '',
+        delivery_forecast: '',
+        success: '',
+        after_imp: '',
+        persons: '',
+        relatedModules: $('#chRelated').val(),
+      }
+      // console.log(changeObj);
+      return changeObj;
+    }
 
+    async function insertChange(change) {
+      $.ajax({
+        url: "/change/inserir",
+        type: "post",
+        contentType: 'application/json',
+        headers: {
+          "Authorization": "Bearer " + '<%=session.token%>'
+        },
+        data: JSON.stringify(change),
+        success: function (result, textStatus, jQxhr) {
+          alertSuccess(
+            'Alteração Salva!',
+            `A Alteração foi salva com sucesso.`
+          );
+          // versionsTable.ajax.reload();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+          alertError(
+            '** ERRO **',
+            `Falha ao salvar a Alteração'.`
+          );
+        }
+      });
+      setNewChangeModal();
+    }
+
+    $('#btnNewChangeSave').on('click', async function () {
+      await insertChange(buildChangeObj());
+    })
+
+    $('#chRequester').change(function () {
+
+      console.log($('#chRequester').val());
+      console.log($('#chRequester option:selected').text());
+      // Do something for option "b"
+    });
+
+    async function getTableChanges(statusChange) {
+      return $('#tableChanges').DataTable({
+        "language": {
+          "url": "https://cdn.datatables.net/plug-ins/9dcbecd42ad/i18n/Portuguese-Brasil.json",
+        },
+        "paging": false,
+        "searching": false,
+        "responsive": true,
+        scrollY: '300px',
+        scrollCollapse: true,
+        destroy: true,
+        order: [[0, 'asc']],
+        ajax: function (data, callback, settings) {
+          $.ajax({
+            url: '/change/buscar',
+            type: 'post',
+            contentType: 'application/json',
+            headers: {
+              "Authorization": "Bearer " + '<%=session.token%>'
+            },
+            data: JSON.stringify({ change_status: statusChange }),
+            success: function (arrVersionsModule, textStatus, jQxhr) {
+              callback({
+                // draw: data.draw,
+                data: arrVersionsModule.data,
+                recordsTotal: arrVersionsModule.data.length,
+                recordsFiltered: arrVersionsModule.data.length
+              });
+            },
+            error: function (jqXhr, textStatus, errorThrown) {
+              console.log(errorThrown)
+            }
+          });
+        },
+        "serverSide": true,
+        columns: [
+          { data: "title" },
+          { data: "priority" },
+          { data: "name" },
+          { data: "request_date" },
+          // { data: "change_module" },
+          {
+            defaultContent: "<div class= 'd-flex justify-content-around'>" +
+              // "<a href='#' id='btnEditModule' class='btn btn-default btn-warning 	btn-circle btn-sm' data-bs-toggle='modal' data-bs-target='#modalModuleDados' ><i class='fa-solid fa-user-pen'></i></a>" +
+              // "<a href='#' id='btnDeleteModule' class='btn btn-default btn-danger btn-circle btn-sm'><i class='fa-solid fa-user-xmark'></i></a>" +
+              "<a href='#' id='btnInfoChange' class='btn btn-default btn-primary btn-circle btn-sm'><i class='fa-solid fa-circle-info' data-bs-toggle='modal' data-bs-target='#infoChangeModal'></i></a>" +
+              "</div>"
+          },
+        ],
+      });
+    }
+
+    $(document).ready(async () => {
+      tableChanges = await getTableChanges('PENDENTE'); //get pendentes ao carregar a pagina
+    })
+
+    $('#tabPendente').click(async function () {
+      tableChanges = await getTableChanges('PENDENTE');
+    })
+    $('#tabAceita').click(async function () {
+      tableChanges = await getTableChanges('ACEITA');
+    })
+    $('#tabRejeitada').click(async function () {
+      tableChanges = await getTableChanges('REJEITADA');
+    })
+    $('#tabImplementacao').click(async function () {
+      tableChanges = await getTableChanges('EM IMPLEMENTAÇÃO');
+    })
+    $('#tabEspera').click(async function () {
+      tableChanges = await getTableChanges('ESPERA');
+    })
+    $('#tabTeste').click(async function () {
+      tableChanges = await getTableChanges('TESTE');
+    })
+    $('#tabDisponivel').click(async function () {
+      tableChanges = await getTableChanges('DISPONÍVEL');
+    })
+    $('#tabImplantada').click(async function () {
+      tableChanges = await getTableChanges('IMPLANTADA');
+    })
 
   </script>
 </body>

@@ -16,10 +16,8 @@ module.exports = class Change extends CRUDModel {
     type,
     module,
     origin,
-    relatedModules,
     date,
     changeAssessment,
-    peoples,
     risks,
     trajectory,
     status,
@@ -28,8 +26,10 @@ module.exports = class Change extends CRUDModel {
     deliveryForecast,
     success,
     afterImp,
-    perPage,    //pagination-params
-    numReg      //pagination-params
+    peoples,
+    relatedModules,
+    // perPage,    //pagination-params
+    // numReg      //pagination-params
   ) {
     super(daoEntidade); //resposta, dao <-- atributos herdados
     this.id = id;             //STRING UUID FORMAT
@@ -54,9 +54,27 @@ module.exports = class Change extends CRUDModel {
     this.deliveryForecast = deliveryForecast;             //date
     this.success = success;             //boolean
     this.afterImp = afterImp;             //STRING
-    this.perPage = perPage;             //number
-    this.numReg = numReg;             //number
+    // this.perPage = perPage;             //number
+    // this.numReg = numReg;             //number
   }
 
+  validaEntrada() {
+    if (!this.title) throw 'Título da alteração vazio ou Inválido.'
+    if (!this.description) throw 'descrição da alteração vazia ou inválida.'
+    if (!this.requester) throw 'Solicitante não informado.'
+    if (!this.success) this.success = null;
+    if (!this.deliveryForecast) this.deliveryForecast = null;
+  }
 
+  validaInserir() {
+    try {
+      this.validaEntrada();
+      this.status = 'PENDENTE';
+      this.id = uuidv4();
+    } catch (error) {
+      utils.msgError(error);
+      throw error;
+    }
+    //console.log(this)
+  }
 }
